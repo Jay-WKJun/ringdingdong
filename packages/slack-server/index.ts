@@ -3,15 +3,12 @@ import axios from 'axios';
 import { WebClient, LogLevel } from '@slack/web-api';
 import { App } from '@slack/bolt'
 
-const client = new WebClient("xoxb-4867243917301-6531559807204-8eAQVzjzl1NCG8dsB7rdV2gu", {
+const client = new WebClient("", {
   // LogLevel can be imported and used to make debugging simpler
   logLevel: LogLevel.DEBUG
 });
 
 const bolt = new App({
-  signingSecret: '23145dcf0a99682f185179a08f51178c',
-  token: 'xoxb-4867243917301-6531559807204-8eAQVzjzl1NCG8dsB7rdV2gu',
-  appToken: 'xapp-1-A06FXMR2GSD-6523297178982-9cfa45666d12578bdaaa61ad08109dc46120a37cbd0210450c635c0d531dc42c',
   socketMode: true,
 });
 
