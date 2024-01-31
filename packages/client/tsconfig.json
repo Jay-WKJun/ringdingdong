@@ -1,5 +1,5 @@
 {
-  "extends": "@ringdingdong/typescript-config/react-library.json",
+  "extends": "@ringdingdong/tsconfig/base.json",
   "compilerOptions": {
     "outDir": "dist"
   },

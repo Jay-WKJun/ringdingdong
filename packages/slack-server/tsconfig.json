@@ -1,0 +1,3 @@
+{
+  "extends": "@ringdingdong/tsconfig/base.json"
+}

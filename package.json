@@ -1,5 +1,5 @@
 {
-  "name": "slack",
+  "name": "ringdingdong",
   "private": true,
   "scripts": {
     "build": "turbo build",

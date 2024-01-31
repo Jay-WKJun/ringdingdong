@@ -1,14 +1,16 @@
 import express from 'express';
-import axios from 'axios';
 import { WebClient, LogLevel } from '@slack/web-api';
 import { App } from '@slack/bolt'
 
-const client = new WebClient("", {
+const client = new WebClient(process.env.SLACK_BOT_TOKEN, {
   // LogLevel can be imported and used to make debugging simpler
   logLevel: LogLevel.DEBUG
 });
 
 const bolt = new App({
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  token: process.env.SLACK_BOT_TOKEN,
+  appToken: process.env.SLACK_APP_TOKEN,
   socketMode: true,
 });
 
