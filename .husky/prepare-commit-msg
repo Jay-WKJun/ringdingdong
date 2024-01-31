@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+BRANCH_NAME=$(git branch --show-current)
+COMMIT_MESSAGE_EDIT_FILE_PATH=$1
+COMMIT_MESSAGE=$(cat $COMMIT_MESSAGE_EDIT_FILE_PATH)
+
+echo "Branch name : $BRANCH_NAME"
+
+# nocasematch 옵션을 설정하여 대소문자를 구분하지 않도록 함
+shopt -s nocasematch
+
+function add_ticket_name_to_commit_message() {
+  local GROUP_NAME=$1
+  if [[ "$BRANCH_NAME" =~ $GROUP_NAME-([0-9]+)$ ]]; then
+    # 캡쳐그룹만을 뽑아서 티켓 이름을 만든다.
+    local TICKET_NAME="$GROUP_NAME-${BASH_REMATCH[1]}"
+
+    echo "$GROUP_NAME Ticket Name : $TICKET_NAME"
+
+    local NEW_COMMIT_MESSAGE="[$TICKET_NAME] $COMMIT_MESSAGE"
+
+    echo "New commit message: $NEW_COMMIT_MESSAGE"
+    echo "$NEW_COMMIT_MESSAGE" > $COMMIT_MESSAGE_EDIT_FILE_PATH
+  fi
+}
+
+add_ticket_name_to_commit_message TN
+add_ticket_name_to_commit_message SS
