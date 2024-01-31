@@ -2,19 +2,26 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Default",
   "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["es2022", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "jsx": "react-jsx",
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
     "incremental": false,
     "isolatedModules": true,
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
     "module": "NodeNext",
     "moduleDetection": "force",
     "moduleResolution": "NodeNext",
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": true,
-    "target": "ES2022"
+    "baseUrl": "../../",
+    "paths": {
+      "@client/*": ["packages/client/src/*"],
+      "@slack-server/*": ["packages/slack-server/src/*"],
+      "@dev-app/*": ["packages/dev-app/src/*"],
+    }
   }
 }
