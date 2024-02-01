@@ -17,9 +17,6 @@ importers:
       husky:
         specifier: ^9.0.7
         version: 9.0.7
-      prettier:
-        specifier: ^3.1.1
-        version: 3.1.1
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.10.6)(typescript@5.3.3)
@@ -136,9 +133,9 @@ importers:
       eslint-plugin-unused-imports:
         specifier: ^3.0.0
         version: 3.0.0(@typescript-eslint/eslint-plugin@6.17.0)(eslint@8.56.0)
-      typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
+      prettier:
+        specifier: ^3.1.1
+        version: 3.1.1
 
   packages/slack-client:
     dependencies:
@@ -4496,6 +4493,7 @@ packages:
   /prettier@3.1.1:
     resolution: {integrity: sha512-22UbSzg8luF4UuZtzgiUOfcGM8s4tjBv6dJRT7j275NXsy2jb4aJa4NNveul5x4eqlF1wuhuR2RElK71RvmVaw==}
     engines: {node: '>=14'}
+    hasBin: true
     dev: true
 
   /promise.allsettled@1.0.7:

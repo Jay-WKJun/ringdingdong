@@ -6,8 +6,8 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
 
-  plugins: ['@typescript-eslint', 'import', 'simple-import-sort', 'prettier'],
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'airbnb-base', 'prettier', "eslint-config-turbo"],
+  plugins: ['@typescript-eslint', 'import', 'prettier', 'unused-imports'],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'airbnb-base', 'prettier', 'turbo'],
   settings: {
     'import/parser': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
@@ -22,6 +22,7 @@ module.exports = {
 
   rules: {
     'prettier/prettier': 'error',
+
     'no-use-before-define': [
       'error',
       {
@@ -51,6 +52,7 @@ module.exports = {
     ],
 
     'import/no-extraneous-dependencies': 'off',
+    'import/no-absolute-path': 'off',
     'import/extensions': 'off',
     'import/export': 'off',
     'import/prefer-default-export': 'off',
@@ -66,7 +68,6 @@ module.exports = {
             position: 'before',
           },
         ],
-        pathGroupsExcludedImportTypes: ['react', 'next'],
         alphabetize: {
           order: 'asc',
           caseInsensitive: true,

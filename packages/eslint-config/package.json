@@ -2,17 +2,6 @@
   "name": "@ringdingdong/eslint-config",
   "version": "0.0.0",
   "private": true,
-  "files": [
-    "base.js",
-    "emotion.js",
-    "next.js",
-    "react.js"
-  ],
-  "exports": {
-    "./base": "./base.js",
-    "./react": "./react.js",
-    "./next": "./next.js"
-  },
   "devDependencies": {
     "@emotion/eslint-plugin": "^11.11.0",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
@@ -26,6 +15,6 @@
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-unused-imports": "^3.0.0",
-    "typescript": "^5.3.3"
+    "prettier": "^3.1.1"
   }
 }
