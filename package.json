@@ -5,7 +5,10 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettㅑer --write \"**/*.{ts,tsx,md}\"",
+    "format": "pretter --write \"**/*.{ts,tsx,md}\"",
+    "client": "pnpm --filter @ringdingdong/client",
+    "dev-app": "pnpm --filter @ringdingdong/dev-app",
+    "slack-server": "pnpm --filter @ringdingdong/slack-server",
     "prepare": "husky install"
   },
   "devDependencies": {
