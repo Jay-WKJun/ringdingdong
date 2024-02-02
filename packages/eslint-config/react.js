@@ -4,8 +4,8 @@ module.exports = {
     ecmaFeatures: { jsx: true },
   },
 
-  extends: ['plugin:react/recommended', 'airbnb', 'airbnb/hooks', './base.js', './emotion.js'],
   plugins: ['react', 'react-hooks', 'jsx-a11y'],
+  extends: ['plugin:react/recommended', 'airbnb', 'airbnb/hooks', './base.js'],
   settings: {
     react: { version: 'detect' },
     'import/parser': {
@@ -28,5 +28,9 @@ module.exports = {
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/require-default-props': 'off',
+    'react/no-unknown-property': ["error", { "ignore": ["css"] }],
+
+    'jsx-a11y/no-static-element-interactions': 'warn',
+    'jsx-a11y/click-events-have-key-events': 'warn',
   },
 };

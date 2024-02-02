@@ -33,18 +33,6 @@ module.exports = {
     'no-alert': 'off',
     'no-param-reassign': 'off',
 
-    'react/function-component-definition': 'off',
-    'react/jsx-filename-extension': [
-      1,
-      {
-        extensions: ['.jsx', '.tsx'],
-      },
-    ],
-    'react/jsx-props-no-spreading': 'off',
-    'react/prop-types': 'off',
-    'react/require-default-props': 'off',
-    'react/react-in-jsx-scope': 'off',
-
     'unused-imports/no-unused-imports': 'error',
     'unused-imports/no-unused-vars': [
       'warn',
@@ -76,9 +64,6 @@ module.exports = {
     ],
 
     '@typescript-eslint/no-empty-interface': 'off',
-
-    'jsx-a11y/no-static-element-interactions': 'warn',
-    'jsx-a11y/click-events-have-key-events': 'warn',
   },
   ignorePatterns: [
     // Ignore dotfiles
