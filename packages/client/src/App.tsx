@@ -1,36 +1,35 @@
-import { useState } from "react";
+import { css } from "@emotion/react";
+import React from "react";
 
-// eslint-disable-next-line import/no-unresolved
-import viteLogo from "/vite.svg";
+import "./index.css";
 
-import reactLogo from "./assets/react.svg";
+const buttonStyle = css`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background-color: #00b4ff;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
+`;
 
-import "./App.css";
+const imgStyle = css`
+  width: 100%;
+  height: 100%;
+`;
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button type="button" onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
+    <button type="button" css={buttonStyle} onClick={() => console.log("click")}>
+      <img css={imgStyle} src="intercom-icon.png" alt="Intercom" />
+    </button>
   );
 }
 
