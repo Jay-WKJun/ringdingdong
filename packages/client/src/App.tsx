@@ -2,9 +2,12 @@ import { css } from "@emotion/react";
 import React from "react";
 
 import "./index.css";
+import Chat from "./Chat";
 
 const buttonStyle = css`
-  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   bottom: 20px;
   right: 20px;
   width: 60px;
@@ -20,16 +23,14 @@ const buttonStyle = css`
     0 3px 6px rgba(0, 0, 0, 0.23);
 `;
 
-const imgStyle = css`
-  width: 100%;
-  height: 100%;
-`;
-
 function App() {
   return (
-    <button type="button" css={buttonStyle} onClick={() => console.log("click")}>
-      <img css={imgStyle} src="intercom-icon.png" alt="Intercom" />
-    </button>
+    <div>
+      <button type="button" css={buttonStyle} onClick={() => console.log("click")}>
+        😁
+      </button>
+      <Chat />
+    </div>
   );
 }
 
