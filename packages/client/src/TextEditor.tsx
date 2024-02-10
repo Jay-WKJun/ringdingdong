@@ -4,9 +4,11 @@ import React, { useCallback, useRef, useState } from "react";
 import { AnchorControllerTemplate, appendAnchorControl } from "./AnchorController";
 import { bubbleAllTagName } from "./utils/dom";
 
-interface TextEditorProps {}
+interface TextEditorProps {
+  onSubmit?: (message: string) => void;
+}
 
-export function TextEditor({}: TextEditorProps) {
+export function TextEditor({ onSubmit }: TextEditorProps) {
   const textEditorWrapperRef = useRef<HTMLDivElement>(null);
   const textInputRef = useRef<HTMLInputElement>(null);
   const templateRef = useRef<HTMLTemplateElement>(null);
@@ -17,10 +19,11 @@ export function TextEditor({}: TextEditorProps) {
 
   const sendMessage = () => {
     if (!textInputRef.current) return;
-
-    const message = textInputRef.current.value;
-    console.log("send message", message);
-    textInputRef.current.value = "";
+    const message = textInputRef.current.innerHTML;
+    onSubmit?.(message);
+    console.log("message", message);
+    // TODO: 초기화 어케함? sanitizing도 신경쓰자.
+    textInputRef.current.innerHTML = "";
 
     // TODO: send message to server
   };
@@ -38,7 +41,7 @@ export function TextEditor({}: TextEditorProps) {
       `}
       ref={textEditorWrapperRef}
       onKeyDown={(e) => {
-        if (e.key === "Enter") {
+        if (e.shiftKey && e.key === "Enter") {
           sendMessage();
         }
       }}
