@@ -99,6 +99,12 @@ export function TextEditor({}: TextEditorProps) {
             background-color: ${selectedTextStates.includes("A") ? "lightgray" : "#f9f9f9"};
           `}
           onClick={() => {
+            const isLinked = selectedTextStates.includes("A");
+            if (isLinked) {
+              document.execCommand("unlink");
+              return;
+            }
+
             const aa = window.prompt("asdf");
             document.execCommand("createLink", false, aa || "https://www.google.com");
           }}
