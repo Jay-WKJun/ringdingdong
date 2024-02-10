@@ -32,9 +32,9 @@ export function TextEditor({}: TextEditorProps) {
       css={css`
         position: relative;
         width: 100%;
-        height: 100px;
         border: 1px solid #ccc;
         border-radius: 5px;
+        box-sizing: border-box;
       `}
       ref={textEditorWrapperRef}
       onKeyDown={(e) => {
@@ -46,7 +46,25 @@ export function TextEditor({}: TextEditorProps) {
       <div
         css={css`
           display: flex;
+          gap: 5px;
           border: none;
+          background-color: #f9f9f9f9;
+          padding: 5px 3px;
+          border-radius: 5px;
+          overflow: hidden;
+          box-sizing: border-box;
+          margin-bottom: 5px;
+
+          button {
+            flex: 1;
+            padding: 0.3em;
+            border: none;
+            cursor: pointer;
+
+            &:hover {
+              background-color: #e0e0e0;
+            }
+          }
         `}
       >
         <button
@@ -137,7 +155,9 @@ export function TextEditor({}: TextEditorProps) {
       <div
         css={css`
           display: flex;
-          align-items: center;
+          min-height: calc(1em + 20px);
+          max-height: calc(5em + 20px);
+          overflow-y: auto;
         `}
       >
         {/* TODO: contentEditable 되는 걸 컴포넌트화 시켜서기 input처럼 다룰 수기있도록 하기 */}
@@ -147,7 +167,7 @@ export function TextEditor({}: TextEditorProps) {
           css={css`
             position: relative;
             width: 100%;
-            height: 80%;
+            height: fit-content;
             padding: 10px;
             border: none;
             outline: none;
@@ -197,14 +217,29 @@ export function TextEditor({}: TextEditorProps) {
             }
           }}
         />
-        <button
-          type="button"
-          onClick={() => {
-            sendMessage();
-          }}
+        <div
+          css={css`
+            width: 30%;
+            min-width: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 7px;
+            box-sizing: border-box;
+            padding-bottom: 5px;
+          `}
         >
-          Send
-        </button>
+          <button
+            type="button"
+            css={css`
+              height: 3em;
+            `}
+            onClick={() => {
+              sendMessage();
+            }}
+          >
+            📨
+          </button>
+        </div>
       </div>
       <AnchorControllerTemplate ref={templateRef} />
     </div>
