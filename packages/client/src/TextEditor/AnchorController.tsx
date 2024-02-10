@@ -39,12 +39,12 @@ const clickAwayEventObserver = initClickAwayEvent();
 
 export function appendAnchorControl({
   anchorElement,
-  templateElement,
+  anchorControlTemplateElement,
 }: {
   anchorElement: HTMLAnchorElement;
-  templateElement: HTMLTemplateElement;
+  anchorControlTemplateElement: HTMLTemplateElement;
 }) {
-  const cloneNode = templateElement.childNodes[0]!.cloneNode(true) as HTMLElement;
+  const cloneNode = anchorControlTemplateElement.childNodes[0]!.cloneNode(true) as HTMLElement;
   const hrefInput = cloneNode.childNodes[0] as HTMLInputElement;
   // href 값 set
   hrefInput.value = anchorElement.href;
