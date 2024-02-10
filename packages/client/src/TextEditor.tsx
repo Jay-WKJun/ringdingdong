@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import React, { useCallback, useRef, useState } from "react";
 
 import { AnchorControllerTemplate, appendAnchorControl } from "./AnchorController";
+import { bubbleAllTagName } from "./utils/dom";
 
 interface TextEditorProps {}
 
@@ -10,7 +11,8 @@ export function TextEditor({}: TextEditorProps) {
   const textInputRef = useRef<HTMLInputElement>(null);
   const templateRef = useRef<HTMLTemplateElement>(null);
 
-  const [selectedTextState, setSelectedTextState] = useState("");
+  // TODO: STATE들 Constants로 빼기
+  const [selectedTextStates, setSelectedTextStates] = useState<string[]>([]);
   const [indentState, setIndentState] = useState("");
 
   const sendMessage = () => {
@@ -24,10 +26,6 @@ export function TextEditor({}: TextEditorProps) {
   };
 
   // TODO: 컨트롤러 보이기 안보이기 설정 (없앨 경우 글을 긁으면 컨트롤러 나오도록 하기)
-
-  // TODO: 선택하면 bold인지 아닌지 판단해서 버튼 활성화 시키기
-  console.log("selectedTextState", selectedTextState);
-  console.log("indentState", indentState);
 
   return (
     <div
@@ -53,6 +51,9 @@ export function TextEditor({}: TextEditorProps) {
       >
         <button
           type="button"
+          css={css`
+            background-color: ${selectedTextStates.includes("B") ? "lightgray" : "#f9f9f9"};
+          `}
           onClick={() => {
             document.execCommand("bold");
           }}
@@ -61,6 +62,9 @@ export function TextEditor({}: TextEditorProps) {
         </button>
         <button
           type="button"
+          css={css`
+            background-color: ${selectedTextStates.includes("I") ? "lightgray" : "#f9f9f9"};
+          `}
           onClick={() => {
             document.execCommand("italic");
           }}
@@ -69,6 +73,9 @@ export function TextEditor({}: TextEditorProps) {
         </button>
         <button
           type="button"
+          css={css`
+            background-color: ${selectedTextStates.includes("STRIKE") ? "lightgray" : "#f9f9f9"};
+          `}
           onClick={() => {
             document.execCommand("strikethrough");
           }}
@@ -77,6 +84,9 @@ export function TextEditor({}: TextEditorProps) {
         </button>
         <button
           type="button"
+          css={css`
+            background-color: ${selectedTextStates.includes("U") ? "lightgray" : "#f9f9f9"};
+          `}
           onClick={() => {
             document.execCommand("underline");
           }}
@@ -85,6 +95,9 @@ export function TextEditor({}: TextEditorProps) {
         </button>
         <button
           type="button"
+          css={css`
+            background-color: ${selectedTextStates.includes("A") ? "lightgray" : "#f9f9f9"};
+          `}
           onClick={() => {
             const aa = window.prompt("asdf");
             document.execCommand("createLink", false, aa || "https://www.google.com");
@@ -94,6 +107,9 @@ export function TextEditor({}: TextEditorProps) {
         </button>
         <button
           type="button"
+          css={css`
+            background-color: ${indentState === "UL" ? "lightgray" : "#f9f9f9"};
+          `}
           onClick={() => {
             document.execCommand("insertUnorderedList");
           }}
@@ -102,6 +118,9 @@ export function TextEditor({}: TextEditorProps) {
         </button>
         <button
           type="button"
+          css={css`
+            background-color: ${indentState === "OL" ? "lightgray" : "#f9f9f9"};
+          `}
           onClick={() => {
             document.execCommand("insertUnorderedList");
           }}
@@ -133,47 +152,34 @@ export function TextEditor({}: TextEditorProps) {
             if (!window) return;
 
             const selection = window.getSelection();
-            if (selection?.isCollapsed) {
-              setSelectedTextState("");
-              const text = selection?.anchorNode?.textContent || "";
+            if (!selection) return;
+
+            if (selection.isCollapsed) {
+              setSelectedTextStates([]);
+              const text = selection.anchorNode?.textContent || "";
+              // -, 1. 했을 떄, 리스트 만들어주는 곳
               // TODO: 별도의 함수로 리팩토링
-              if (/^[-][\s].*/.test(text)) {
-                selection!.anchorNode!.textContent = text.replace(/^[-][\s]+/, "") || "";
+              if (/(^|\n)[-][\s].*/.test(text)) {
                 document.execCommand("insertUnorderedList");
+                selection.anchorNode!.textContent = text.replace(/[-][\s]+/, "") || "";
                 return;
               }
-              if (/^[\d][.][\s].*/.test(text)) {
-                selection!.anchorNode!.textContent = text.replace(/^[\d][.][\s]+/, "") || "";
+              if (/(^|\n)[\d][.][\s].*/.test(text)) {
                 document.execCommand("insertOrderedList");
+                selection.anchorNode!.textContent = text.replace(/[\d][.][\s]+/, "") || "";
               }
             } else {
-              const anchorParentTagName = selection?.anchorNode?.parentElement?.tagName;
-              const focusParentTagName = selection?.focusNode?.parentElement?.tagName;
-              if (anchorParentTagName && focusParentTagName && anchorParentTagName === focusParentTagName) {
-                setSelectedTextState(anchorParentTagName);
-              } else {
-                setSelectedTextState("");
-              }
+              const richTextStates = getRichTextStates(
+                selection,
+                e.target as HTMLElement,
+                new Set(["B", "I", "U", "STRIKE", "A"]),
+              );
+              setSelectedTextStates(richTextStates);
             }
 
-            if (selection?.anchorNode) {
-              recurseParentElement(selection.anchorNode as HTMLElement);
-            }
-
-            function recurseParentElement(element: HTMLElement) {
-              if (element === e.target) {
-                setIndentState("");
-                return;
-              }
-              if (element.tagName === "UL") {
-                setIndentState("UL");
-                return;
-              }
-              if (element.tagName === "OL") {
-                setIndentState("OL");
-                return;
-              }
-              recurseParentElement(element.parentElement!);
+            if (selection.anchorNode && selection.focusNode) {
+              const aa = getRichTextStates(selection, e.target as HTMLElement, new Set(["UL", "OL"]));
+              setIndentState(aa[0] || "");
             }
           }, [])}
           onClick={(e) => {
@@ -197,4 +203,18 @@ export function TextEditor({}: TextEditorProps) {
       <AnchorControllerTemplate ref={templateRef} />
     </div>
   );
+}
+
+function getRichTextStates(select: Selection, rootElement: HTMLElement, selectedTagNames?: Set<string>) {
+  const anchorNode = select.anchorNode as HTMLElement;
+  const focusNode = select.focusNode as HTMLElement;
+
+  const anchorTagNames = bubbleAllTagName(anchorNode, { rootElement });
+  const endTagNames = bubbleAllTagName(focusNode, { rootElement });
+
+  const richTextStates: string[] = Array.from(new Set([...anchorTagNames, ...endTagNames])).filter(
+    (state) => selectedTagNames?.has(state),
+  );
+
+  return richTextStates;
 }
