@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Default",
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES5",
     "lib": ["es2022", "DOM", "DOM.Iterable"],
     "strict": true,
     "jsx": "react-jsx",
@@ -10,6 +10,7 @@
     "declarationMap": true,
     "incremental": false,
     "isolatedModules": true,
+    "esModuleInterop": true,
     "module": "ES2022",
     "moduleDetection": "force",
     "moduleResolution": "Bundler",
