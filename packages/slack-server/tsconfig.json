@@ -1,8 +1,9 @@
 {
   "extends": "@ringdingdong/tsconfig/base.json",
-  "include": ["index.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"],
   "compilerOptions": {
+    "strict": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
