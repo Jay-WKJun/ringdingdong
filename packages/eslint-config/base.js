@@ -32,6 +32,11 @@ module.exports = {
     'no-shadow': 'off',
     'no-alert': 'off',
     'no-param-reassign': 'off',
+    'no-underscore-dangle': 'off',
+    'no-undef': 'off',
+    'no-useless-escape': 'off',
+    'no-cond-assign': 'off',
+    'class-methods-use-this': 'off',
 
     'unused-imports/no-unused-imports': 'error',
     'unused-imports/no-unused-vars': [
