@@ -38,4 +38,5 @@ yarn-error.log*
 *.pem
 
 # Memo
+**/memo/*
 memo.md
