@@ -96,6 +96,9 @@ export function Chat({ tell }: ChatProps) {
                 height: 20px;
                 font-size: 0.5em;
               `}
+              onClick={() => {
+                navigator.clipboard.writeText(tell.message);
+              }}
             >
               📎
             </button>
