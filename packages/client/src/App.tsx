@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import React from "react";
 
 import "./index.css";
-import Chat from "./Chat";
+import { CommunicationPlatform } from "./CommunicationPlatform";
 
 const buttonStyle = css`
   display: flex;
@@ -29,7 +29,7 @@ function App() {
       <button type="button" css={buttonStyle} onClick={() => console.log("click")}>
         😁
       </button>
-      <Chat />
+      <CommunicationPlatform />
     </div>
   );
 }
