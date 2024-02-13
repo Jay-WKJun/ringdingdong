@@ -10,11 +10,11 @@ const chatContainerStyle = css`
   right: 0;
   width: 300px;
   height: 500px;
-  padding: 10px 0;
   border: 1px solid #ccc;
   background-color: #fff;
   display: flex;
   flex-direction: column;
+  border-radius: 10px;
   gap: 10px;
 `;
 

@@ -2,17 +2,16 @@ import { css } from "@emotion/react";
 import React from "react";
 
 const headerStyle = css`
-  height: 60px;
+  height: 40px;
   padding: 10px;
+  padding-left: 20px;
   border-bottom: 1px solid #ccc;
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
 
-interface HeaderProps {}
-
-export function Header({}: HeaderProps) {
+export function Header() {
   return (
     <div css={headerStyle}>
       <h4>Chat</h4>
