@@ -10,10 +10,11 @@ import { TextController } from "./TextController";
 import { TextInput, SelectEventParameters } from "./TextInput";
 
 interface TextEditorProps {
+  bottomMode?: boolean;
   onSubmit?: (message: string) => void;
 }
 
-export function TextEditor({ onSubmit }: TextEditorProps) {
+export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
   const textEditorWrapperRef = useRef<HTMLDivElement>(null);
   const textInputRef = useRef<HTMLInputElement>(null);
   const anchorControlTemplateRef = useRef<HTMLTemplateElement>(null);
@@ -39,7 +40,7 @@ export function TextEditor({ onSubmit }: TextEditorProps) {
       css={css`
         position: relative;
         width: 100%;
-        border: 1px solid #ccc;
+        border: ${bottomMode ? "none" : "1px solid #ccc"};
         border-radius: 5px;
         box-sizing: border-box;
       `}

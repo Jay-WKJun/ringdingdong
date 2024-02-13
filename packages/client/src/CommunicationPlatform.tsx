@@ -23,7 +23,7 @@ export function CommunicationPlatform() {
     <div css={chatContainerStyle}>
       <Header />
       <ChatHistory />
-      <TextEditor />
+      <TextEditor bottomMode />
     </div>
   );
 }
