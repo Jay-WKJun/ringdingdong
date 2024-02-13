@@ -16,9 +16,6 @@ interface ChatProps {
 
 export function Chat({ tell }: ChatProps) {
   const [isHover, setIsHover] = useState(false);
-  // 양쪽 끝에 아바타
-  // 마우스가 올라가면 끝으로 뭔가 나오도록 하기, 기능은 클립보드 복사 (별도의 컴포넌트)
-  // HTML을 받아들일 수 있도록 contentEditable, fix 불가하도록
   return (
     <div
       css={css`
