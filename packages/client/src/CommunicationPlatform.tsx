@@ -4,6 +4,7 @@ import React from "react";
 import { ChatHistory } from "./ChatHistory";
 import { Header } from "./Header";
 import { TextEditor } from "./TextEditor";
+import { SERVER_URL } from "./utils/env";
 
 const chatContainerStyle = css`
   display: flex;
@@ -24,7 +25,20 @@ export function CommunicationPlatform() {
       <div css={chatContainerStyle}>
         <Header />
         <ChatHistory />
-        <TextEditor bottomMode />
+        <TextEditor
+          bottomMode
+          onSubmit={(text) => {
+            fetch(`${SERVER_URL}/1/message`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(text),
+            })
+              .then((res) => res.json())
+              .then((res) => console.log(res));
+          }}
+        />
       </div>
     </div>
   );
