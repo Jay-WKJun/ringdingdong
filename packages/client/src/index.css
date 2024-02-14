@@ -34,11 +34,17 @@ a:hover {
 }
 
 body {
+  width: 100vw;
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+
+#root {
+  width: 60%;
+  height: 100%;
 }
 
 h1 {

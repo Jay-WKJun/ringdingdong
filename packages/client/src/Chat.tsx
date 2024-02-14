@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 import { Parser } from "./utils/parser";
 
-export interface Tell {
+export interface Message {
   id: string;
   type: string;
   message: string;
@@ -13,16 +13,16 @@ export interface Tell {
 }
 
 interface ChatProps {
-  tell: Tell;
+  message: Message;
 }
 
-export function Chat({ tell }: ChatProps) {
+export function Chat({ message }: ChatProps) {
   const [isHover, setIsHover] = useState(false);
   return (
     <div
       css={css`
         display: flex;
-        flex-direction: ${tell.isMyMessage ? "row-reverse" : "row"};
+        flex-direction: ${message.isMyMessage ? "row-reverse" : "row"};
         align-items: center;
         width: 100%;
         padding: 0 10px;
@@ -45,23 +45,23 @@ export function Chat({ tell }: ChatProps) {
           background-color: red;
         `}
       >
-        {tell.avatarUrl ? (
+        {message.avatarUrl ? (
           <img
             css={css`
               width: inherit;
               height: inherit;
             `}
-            src={tell.avatarUrl}
-            alt={`${tell.id}-avatar`}
+            src={message.avatarUrl}
+            alt={`${message.id}-avatar`}
           />
         ) : (
-          <div>{tell.isMyMessage ? "😁" : "✋"}</div>
+          <div>{message.isMyMessage ? "😁" : "✋"}</div>
         )}
       </div>
       <div
         css={css`
           display: flex;
-          flex-direction: ${tell.isMyMessage ? "row-reverse" : "row"};
+          flex-direction: ${message.isMyMessage ? "row-reverse" : "row"};
           align-items: flex-end;
           flex: 1;
           gap: 5px;
@@ -78,7 +78,7 @@ export function Chat({ tell }: ChatProps) {
             word-break: break-all;
           `}
         >
-          {Parser.parse(tell.message)}
+          {Parser.parse(message.message)}
         </div>
         {isHover && (
           <div
@@ -97,7 +97,7 @@ export function Chat({ tell }: ChatProps) {
                 font-size: 0.5em;
               `}
               onClick={() => {
-                navigator.clipboard.writeText(tell.message);
+                navigator.clipboard.writeText(message.message);
               }}
             >
               📎
