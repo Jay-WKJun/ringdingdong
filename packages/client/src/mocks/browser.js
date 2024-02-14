@@ -1,6 +1,6 @@
 import { setupWorker } from "msw/browser";
 
-import * as handlers from "./handlers";
+import { handlers } from "./handlers";
 
-const worker = setupWorker(...Object.values(handlers));
+const worker = setupWorker(...handlers);
 (async () => worker.start())();
