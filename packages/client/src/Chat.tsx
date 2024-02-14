@@ -1,15 +1,22 @@
 import { css } from "@emotion/react";
 import React, { useState } from "react";
 
-import type { Message } from "./types";
+import { useSetMessageStates } from "./contexts/MessageStates";
+import type { Message, MessageSendState } from "./types";
+import { SERVER_URL } from "./utils/env";
 import { Parser } from "./utils/parser";
 
 interface ChatProps {
+  tempId?: number;
+  sendState?: MessageSendState;
   message: Message;
 }
 
-export function Chat({ message }: ChatProps) {
+export function Chat({ tempId, sendState, message }: ChatProps) {
   const [isHover, setIsHover] = useState(false);
+
+  const setMessageStates = useSetMessageStates();
+
   return (
     <div
       css={css`
@@ -72,7 +79,38 @@ export function Chat({ message }: ChatProps) {
         >
           {Parser.parse(message.message)}
         </div>
-        {isHover && (
+        {/* TODO: 리팩토링 및 디자인 적용 */}
+        {sendState === "sending" && <div>Loading...</div>}
+        {sendState === "failed" && (
+          <div>
+            <button
+              type="button"
+              onClick={() => {
+                fetch(`${SERVER_URL}/1/message`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ tempId, text: message.message }),
+                });
+              }}
+            >
+              re
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMessageStates((prev) => {
+                  if (!prev) return prev;
+                  return prev.filter((state) => state.tempId !== tempId);
+                });
+              }}
+            >
+              delete
+            </button>
+          </div>
+        )}
+        {isHover && !sendState && (
           <div
             css={css`
               padding-bottom: 5px;

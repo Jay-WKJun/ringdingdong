@@ -7,7 +7,10 @@ export interface Message {
   isMyMessage: boolean;
 }
 
+export type MessageSendState = "sending" | "failed";
+
 export interface MessageState {
-  isTemp?: boolean;
+  tempId?: number;
+  sendState?: MessageSendState;
   message: Message;
 }

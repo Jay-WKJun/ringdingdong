@@ -33,7 +33,9 @@ export function ChatHistory() {
   return (
     <div css={messageListStyle}>
       {messageStates ? (
-        messageStates.map(({ message }) => <Chat key={message.id} message={message} />)
+        messageStates.map(({ message, tempId, sendState }) => (
+          <Chat key={message.id ?? tempId} message={message} tempId={tempId} sendState={sendState} />
+        ))
       ) : (
         <div
           css={css`
