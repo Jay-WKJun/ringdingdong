@@ -1,6 +1,8 @@
 import { css } from "@emotion/react";
 import React, { useState } from "react";
 
+import { Parser } from "./utils/parser";
+
 export interface Tell {
   id: string;
   type: string;
@@ -75,8 +77,9 @@ export function Chat({ tell }: ChatProps) {
             white-space: break-spaces;
             word-break: break-all;
           `}
-          dangerouslySetInnerHTML={{ __html: tell.message }}
-        />
+        >
+          {Parser.parse(tell.message)}
+        </div>
         {isHover && (
           <div
             css={css`

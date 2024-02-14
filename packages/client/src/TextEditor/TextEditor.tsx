@@ -60,7 +60,6 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
           overflow-y: auto;
         `}
       >
-        {/* TODO: 만들어져 있는 string을 어떻게 여기 넣을 수 있을까? sanitizer에 신경쓰자. */}
         <TextInput
           ref={textInputRef}
           onCollapsedSelect={useCallback(({ selection }: SelectEventParameters) => {
