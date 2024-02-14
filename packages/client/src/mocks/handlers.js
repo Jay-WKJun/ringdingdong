@@ -10,17 +10,22 @@ const mockMessages = Array.from({ length: 10 }, (_, i) => ({
   isMyMessage: i % 2 === 0,
 }));
 
+// TODO: 사용자 추가 API
+// TODO: 헬스체크 API
 export const handlers = [
   http.get("/1/messages", () => HttpResponse.json(mockMessages)),
   http.post("/1/message", async ({ request }) => {
     const reader = request.body.getReader();
-    reader.read().then(function pump({ done, value }) {
+    let text;
+    await reader.read().then(function pump({ done, value }) {
       if (done) {
         return null;
       }
-      console.log("received : ", new TextDecoder().decode(value));
+      text = new TextDecoder().decode(value);
       return reader.read().then(pump);
     });
+
+    console.log("text", text);
 
     await delay(1000);
     return HttpResponse.json("success");
