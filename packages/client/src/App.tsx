@@ -26,9 +26,6 @@ const buttonStyle = css`
 function App() {
   return (
     <div>
-      <button type="button" css={buttonStyle} onClick={() => console.log("click")}>
-        😁
-      </button>
       <CommunicationPlatform />
     </div>
   );
