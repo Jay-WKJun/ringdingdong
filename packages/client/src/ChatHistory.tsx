@@ -1,7 +1,9 @@
 import { css } from "@emotion/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
-import { Chat, Message } from "./Chat";
+import { Chat } from "./Chat";
+import { useMessageStates, useSetMessageStates } from "./contexts/MessageStates";
+import type { Message } from "./types";
 import { SERVER_URL } from "./utils/env";
 
 const messageListStyle = css`
@@ -15,28 +17,23 @@ const messageListStyle = css`
   box-sizing: border-box;
 `;
 
-interface MessageState {
-  isTemp?: boolean;
-  message: Message;
-}
-
 export function ChatHistory() {
-  // TODO: state는 context로 관리
-  const [chats, setChats] = useState<MessageState[]>();
+  const messageStates = useMessageStates();
+  const setMessageStates = useSetMessageStates();
 
   useEffect(() => {
     setTimeout(() => {
       fetch(`${SERVER_URL}/1/messages`)
         .then((res) => res.json())
-        .then((res) => setChats(res?.map((message: Message) => ({ message }) || [])));
+        .then((res) => setMessageStates(res?.map((message: Message) => ({ message }) || [])));
     }, 1000);
-  }, []);
+  }, [setMessageStates]);
 
   // TODO: Virtual Scroll
   return (
     <div css={messageListStyle}>
-      {chats ? (
-        chats.map(({ message }) => <Chat key={message.id} message={message} />)
+      {messageStates ? (
+        messageStates.map(({ message }) => <Chat key={message.id} message={message} />)
       ) : (
         <div
           css={css`

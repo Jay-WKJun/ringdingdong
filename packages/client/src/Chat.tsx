@@ -1,16 +1,8 @@
 import { css } from "@emotion/react";
 import React, { useState } from "react";
 
+import type { Message } from "./types";
 import { Parser } from "./utils/parser";
-
-export interface Message {
-  id: string;
-  type: string;
-  message: string;
-  createdAt: string;
-  avatarUrl?: string;
-  isMyMessage: boolean;
-}
 
 interface ChatProps {
   message: Message;
