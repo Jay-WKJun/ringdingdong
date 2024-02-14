@@ -6,24 +6,26 @@ import { Header } from "./Header";
 import { TextEditor } from "./TextEditor";
 
 const chatContainerStyle = css`
-  bottom: 0;
-  right: 0;
-  width: 300px;
-  height: 500px;
-  border: 1px solid #ccc;
-  background-color: #fff;
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
   gap: 10px;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  box-sizing: border-box;
 `;
 
 export function CommunicationPlatform() {
   return (
-    <div css={chatContainerStyle}>
-      <Header />
-      <ChatHistory />
-      <TextEditor bottomMode />
+    <div style={{ height: "100vh" }}>
+      <div css={chatContainerStyle}>
+        <Header />
+        <ChatHistory />
+        <TextEditor bottomMode />
+      </div>
     </div>
   );
 }

@@ -102,7 +102,7 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
         />
         <div
           css={css`
-            width: 30%;
+            width: 70px;
             min-width: 70px;
             display: flex;
             align-items: center;
