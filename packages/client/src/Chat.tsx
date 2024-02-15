@@ -81,33 +81,72 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
           {Parser.parse(message.message)}
         </div>
         {/* TODO: 리팩토링 및 디자인 적용 */}
+
         {sendState === "sending" && (
-          <Spinner
+          <div
             css={css`
-              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center !important;
+              width: 30px;
               height: 100%;
-              max-width: 100px;
-              max-height: 100px;
-              min-width: 30px;
-              min-height: 30px;
             `}
-          />
+          >
+            <Spinner
+              css={css`
+                width: 15px;
+                height: 15px;
+                border-width: 5px;
+              `}
+            />
+          </div>
         )}
         {sendState === "failed" && (
-          <div>
+          <>
             <button
               type="button"
-              onClick={() => {
-                fetch(`${SERVER_URL}/1/message`, {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({ tempId, text: message.message }),
+              onClick={async () => {
+                setMessageStates((prev) => {
+                  if (!prev) return prev;
+                  return prev.map((state) => {
+                    if (state.tempId === tempId) {
+                      return { ...state, sendState: "sending" };
+                    }
+                    return state;
+                  });
                 });
+                try {
+                  const res = await fetch(`${SERVER_URL}/1/message`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ tempId, text: message.message }),
+                  }).then((res) => res.json());
+
+                  setMessageStates((prev) => {
+                    if (!prev) return prev;
+                    return prev.map((state) => {
+                      if (state.tempId === res.tempId) {
+                        return { message };
+                      }
+                      return state;
+                    });
+                  });
+                } catch {
+                  setMessageStates((prev) => {
+                    if (!prev) return prev;
+                    return prev.map((state) => {
+                      if (state.tempId === tempId) {
+                        return { ...state, sendState: "failed" };
+                      }
+                      return state;
+                    });
+                  });
+                }
               }}
             >
-              re
+              📨
             </button>
             <button
               type="button"
@@ -118,9 +157,9 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
                 });
               }}
             >
-              delete
+              ❌
             </button>
-          </div>
+          </>
         )}
         {isHover && !sendState && (
           <div
