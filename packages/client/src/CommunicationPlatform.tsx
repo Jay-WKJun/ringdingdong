@@ -13,8 +13,8 @@ const chatContainerStyle = css`
   gap: 10px;
   width: 100%;
   height: 100%;
-  min-width: 300px;
-  min-height: 300px;
+  min-width: 280px;
+  min-height: 200px;
   border: 1px solid #ccc;
   border-radius: 10px;
   background-color: #fff;
