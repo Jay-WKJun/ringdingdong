@@ -13,7 +13,8 @@
     "@slack/bolt": "^3.17.1",
     "@slack/web-api": "^7.0.1",
     "dotenv": "^16.4.2",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "slack-markdown": "^0.3.0"
   },
   "devDependencies": {
     "@ringdingdong/eslint-config": "workspace:*",
