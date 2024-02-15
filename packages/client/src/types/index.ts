@@ -1,3 +1,7 @@
+export interface AppConfig {
+  serverUrl: string;
+}
+
 export interface Message {
   id: string;
   type: string;

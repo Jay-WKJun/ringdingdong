@@ -2,13 +2,20 @@ import React from "react";
 
 import "./index.css";
 import { CommunicationPlatform } from "./CommunicationPlatform";
+import { AppConfigContextProvider } from "./contexts/AppConfig";
 import { MessageStatesContextProvider } from "./contexts/MessageStates";
 
-function App() {
+interface AppProps {
+  serverUrl: string;
+}
+
+function App({ serverUrl }: AppProps) {
   return (
-    <MessageStatesContextProvider>
-      <CommunicationPlatform />
-    </MessageStatesContextProvider>
+    <AppConfigContextProvider serverUrl={serverUrl}>
+      <MessageStatesContextProvider>
+        <CommunicationPlatform />
+      </MessageStatesContextProvider>
+    </AppConfigContextProvider>
   );
 }
 
