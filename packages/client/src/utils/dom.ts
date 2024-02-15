@@ -7,6 +7,6 @@ export function bubbleAllTagName(
   if (element === rootElement) return tagNames;
 
   if (element.tagName) tagNames.push(element.tagName);
-  console.log(element.tagName);
+
   return bubbleAllTagName(element.parentElement!, { ...options, tagNames });
 }
