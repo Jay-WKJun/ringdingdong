@@ -3,9 +3,9 @@ import React, { useEffect } from "react";
 
 import { Chat } from "./Chat";
 import { Spinner } from "./components/Spinner";
+import { useAppConfig } from "./contexts/AppConfig";
 import { useMessageStates, useSetMessageStates } from "./contexts/MessageStates";
 import type { Message } from "./types";
-import { SERVER_URL } from "./utils/env";
 
 const messageListStyle = css`
   display: flex;
@@ -21,14 +21,15 @@ const messageListStyle = css`
 export function ChatHistory() {
   const messageStates = useMessageStates();
   const setMessageStates = useSetMessageStates();
+  const appConfig = useAppConfig();
 
   useEffect(() => {
     setTimeout(() => {
-      fetch(`${SERVER_URL}/1/messages`)
+      fetch(`${appConfig.serverUrl}/1/messages`)
         .then((res) => res.json())
         .then((res) => setMessageStates(res?.map((message: Message) => ({ message }) || [])));
     }, 1000);
-  }, [setMessageStates]);
+  }, [appConfig.serverUrl, setMessageStates]);
 
   // TODO: Virtual Scroll
   return (

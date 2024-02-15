@@ -2,9 +2,9 @@ import { css } from "@emotion/react";
 import React, { useState } from "react";
 
 import { Spinner } from "./components/Spinner";
+import { useAppConfig } from "./contexts/AppConfig";
 import { useSetMessageStates } from "./contexts/MessageStates";
 import type { Message, MessageSendState } from "./types";
-import { SERVER_URL } from "./utils/env";
 import { Parser } from "./utils/parser";
 
 interface ChatProps {
@@ -17,6 +17,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
   const [isHover, setIsHover] = useState(false);
 
   const setMessageStates = useSetMessageStates();
+  const appConfig = useAppConfig();
 
   return (
     <div
@@ -116,7 +117,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
                   });
                 });
                 try {
-                  const res = await fetch(`${SERVER_URL}/1/message`, {
+                  const res = await fetch(`${appConfig.serverUrl}/1/message`, {
                     method: "POST",
                     headers: {
                       "Content-Type": "application/json",

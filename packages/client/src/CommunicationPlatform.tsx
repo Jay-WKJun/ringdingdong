@@ -2,10 +2,10 @@ import { css } from "@emotion/react";
 import React from "react";
 
 import { ChatHistory } from "./ChatHistory";
+import { useAppConfig } from "./contexts/AppConfig";
 import { useSetMessageStates } from "./contexts/MessageStates";
 import { Header } from "./Header";
 import { TextEditor } from "./TextEditor";
-import { SERVER_URL } from "./utils/env";
 
 const chatContainerStyle = css`
   display: flex;
@@ -23,6 +23,7 @@ const chatContainerStyle = css`
 
 export function CommunicationPlatform() {
   const setMessageState = useSetMessageStates();
+  const appConfig = useAppConfig();
 
   return (
     <div style={{ height: "100vh" }}>
@@ -64,7 +65,7 @@ export function CommunicationPlatform() {
               ];
             });
 
-            fetch(`${SERVER_URL}/1/message`, {
+            fetch(`${appConfig.serverUrl}/1/message`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
