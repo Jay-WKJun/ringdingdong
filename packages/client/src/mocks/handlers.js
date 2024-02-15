@@ -15,6 +15,7 @@ let id = 11;
 // TODO: 사용자 추가 API
 // TODO: 헬스체크 API
 export const handlers = [
+  http.get("/health", () => new HttpResponse(null, { status: 204 })),
   http.get("/1/messages", () => HttpResponse.json(mockMessages)),
   http.post("/1/message", async ({ request }) => {
     const reader = request.body.getReader();
