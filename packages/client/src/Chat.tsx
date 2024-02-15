@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import React, { useState } from "react";
 
+import { Spinner } from "./components/Spinner";
 import { useSetMessageStates } from "./contexts/MessageStates";
 import type { Message, MessageSendState } from "./types";
 import { SERVER_URL } from "./utils/env";
@@ -80,7 +81,18 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
           {Parser.parse(message.message)}
         </div>
         {/* TODO: 리팩토링 및 디자인 적용 */}
-        {sendState === "sending" && <div>Loading...</div>}
+        {sendState === "sending" && (
+          <Spinner
+            css={css`
+              width: 100%;
+              height: 100%;
+              max-width: 100px;
+              max-height: 100px;
+              min-width: 30px;
+              min-height: 30px;
+            `}
+          />
+        )}
         {sendState === "failed" && (
           <div>
             <button

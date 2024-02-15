@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import React, { useEffect } from "react";
 
 import { Chat } from "./Chat";
+import { Spinner } from "./components/Spinner";
 import { useMessageStates, useSetMessageStates } from "./contexts/MessageStates";
 import type { Message } from "./types";
 import { SERVER_URL } from "./utils/env";
@@ -46,7 +47,16 @@ export function ChatHistory() {
             height: 100%;
           `}
         >
-          Loading...
+          <Spinner
+            css={css`
+              width: 100%;
+              height: 100%;
+              max-width: 50px;
+              max-height: 50px;
+              min-width: 30px;
+              min-height: 30px;
+            `}
+          />
         </div>
       )}
     </div>
