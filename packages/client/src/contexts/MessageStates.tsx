@@ -1,6 +1,6 @@
 import { useState, Dispatch, SetStateAction, createContext, useContext } from "react";
 
-import type { MessageState } from "../types";
+import type { MessageState } from "@/types";
 
 export type MessageStatesType = MessageState[] | undefined;
 

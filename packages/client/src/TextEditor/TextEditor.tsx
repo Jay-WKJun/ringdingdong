@@ -1,9 +1,8 @@
 import { css } from "@emotion/react";
 import React, { useCallback, useRef, useState } from "react";
 
-// TODO: TS 절대 경로 다시 설정
-import { Button } from "../components/Button";
-import { bubbleAllTagName } from "../utils/dom";
+import { Button } from "@/components/Button";
+import { bubbleAllTagName } from "@/utils/dom";
 
 import { AnchorControllerTemplate, appendAnchorControl } from "./AnchorController";
 import { TEXT_STATES, TEXT_INDENTS, ANCHOR } from "./constants";

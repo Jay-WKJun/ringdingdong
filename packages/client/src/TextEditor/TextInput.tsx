@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import { forwardRef, useCallback, SyntheticEvent, MouseEvent as ReactMouseEvent, memo } from "react";
 import sanitizeHTML from "sanitize-html";
 
-import { Parser } from "../utils/parser";
+import { Parser } from "@/utils/parser";
 
 export interface SelectEventParameters {
   event: SyntheticEvent<HTMLDivElement, Event>;

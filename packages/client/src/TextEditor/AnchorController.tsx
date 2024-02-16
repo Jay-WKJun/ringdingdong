@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import React, { forwardRef } from "react";
 
-import { Button } from "../components/Button";
+import { Button } from "@/components/Button";
 
 interface AnchorControlProps {}
 

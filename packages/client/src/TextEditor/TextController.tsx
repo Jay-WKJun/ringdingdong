@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import React from "react";
 
-import { Button } from "../components/Button";
+import { Button } from "@/components/Button";
 
 import { ANCHOR, BOLD, ITALIC, ORDERED_LIST, STRIKE, UNDERLINE, UNORDERED_LIST } from "./constants";
 

@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo } from "react";
 
-import type { AppConfig } from "../types";
+import type { AppConfig } from "@/types";
 
 const AppConfigContext = createContext<AppConfig>({ serverUrl: "http://localhost:3000" });
 
