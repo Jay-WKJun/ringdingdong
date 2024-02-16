@@ -29,7 +29,6 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
     const message = textInputRef.current.innerHTML;
     onSubmit?.(message);
     console.log("message", message);
-    // TODO: 초기화 어케함? sanitizing도 신경쓰자.
     textInputRef.current.innerHTML = "";
 
     // TODO: send message to server

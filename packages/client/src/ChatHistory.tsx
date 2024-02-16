@@ -7,17 +7,6 @@ import { useAppConfig } from "./contexts/AppConfig";
 import { useMessageStates, useSetMessageStates } from "./contexts/MessageStates";
 import type { Message } from "./types";
 
-const messageListStyle = css`
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 10px;
-  padding: 10px;
-  width: 100%;
-  height: calc(100% - 120px);
-  overflow-y: auto;
-  box-sizing: border-box;
-`;
-
 export function ChatHistory() {
   const messageStates = useMessageStates();
   const setMessageStates = useSetMessageStates();
@@ -33,7 +22,18 @@ export function ChatHistory() {
 
   // TODO: Virtual Scroll
   return (
-    <div css={messageListStyle}>
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 10px;
+        padding: 10px;
+        width: 100%;
+        height: calc(100% - 120px);
+        overflow-y: auto;
+        box-sizing: border-box;
+      `}
+    >
       {messageStates ? (
         messageStates.map(({ message, tempId, sendState }) => (
           <Chat key={message.id ?? tempId} message={message} tempId={tempId} sendState={sendState} />

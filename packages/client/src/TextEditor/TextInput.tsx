@@ -58,7 +58,6 @@ const TextInputComponent = forwardRef<HTMLDivElement, TextInputProps>(
         onPaste={async (e) => {
           e.preventDefault();
 
-          // 이미 적혀있는 내용물을 가져오고, 어디에 select 되어있는지 파악해서 문자열에 splice
           const selection = window.getSelection();
           if (!selection) return;
 

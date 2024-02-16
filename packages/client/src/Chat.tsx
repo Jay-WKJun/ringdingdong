@@ -82,8 +82,6 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
         >
           {Parser.parse(message.message)}
         </div>
-        {/* TODO: 리팩토링 및 디자인 적용 */}
-
         {sendState === "sending" && (
           <div
             css={css`

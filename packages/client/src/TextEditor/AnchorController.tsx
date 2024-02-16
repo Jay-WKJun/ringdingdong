@@ -39,6 +39,7 @@ export const AnchorControllerTemplate = forwardRef<HTMLTemplateElement, AnchorCo
 
 const clickAwayEventObserver = initClickAwayEvent();
 
+// TODO: 위로 뜨는게 아닌, 글 위에 작은 버튼 올리는 방식으로 변경
 export function appendAnchorControl({
   anchorElement,
   anchorControlTemplateElement,
