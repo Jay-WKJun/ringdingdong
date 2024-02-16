@@ -73,7 +73,7 @@ const TextInputComponent = forwardRef<HTMLDivElement, TextInputProps>(
           }
         }}
       >
-        {Parser.parse(initText)}
+        {Parser.parse(initText ?? "")}
       </div>
     );
   },
