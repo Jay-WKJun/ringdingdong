@@ -1,29 +1,6 @@
 import { css } from "@emotion/react";
 
 export const globalStyle = css`
-  :root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    line-height: 1.5;
-    font-weight: 400;
-
-    color-scheme: light dark;
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
-
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  html {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
   a {
     font-weight: 500;
     color: #646cff;
@@ -34,19 +11,12 @@ export const globalStyle = css`
     color: #535bf2;
   }
 
-  body {
-    width: 100vw;
-    margin: 0;
-    display: flex;
-    place-items: center;
-    min-width: 320px;
-    min-height: 100vh;
-  }
-
   #root {
     width: 100%;
-    max-width: 800px;
     height: 100%;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
   }
 
   h1 {
@@ -61,7 +31,7 @@ export const globalStyle = css`
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;
-    background-color: #1a1a1a;
+    background-color: inherit;
     cursor: pointer;
     transition: border-color 0.25s;
   }
@@ -71,18 +41,5 @@ export const globalStyle = css`
   button:focus,
   button:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
-  }
-
-  @media (prefers-color-scheme: light) {
-    :root {
-      color: #213547;
-      background-color: #ffffff;
-    }
-    a:hover {
-      color: #747bff;
-    }
-    button {
-      background-color: #f9f9f9;
-    }
   }
 `;
