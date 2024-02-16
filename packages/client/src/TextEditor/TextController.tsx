@@ -1,6 +1,8 @@
 import { css } from "@emotion/react";
 import React from "react";
 
+import { Button } from "../components/Button";
+
 import { ANCHOR, BOLD, ITALIC, ORDERED_LIST, STRIKE, UNDERLINE, UNORDERED_LIST } from "./constants";
 
 interface TextControllerProps {
@@ -34,7 +36,7 @@ export function TextController({ textStates, indentState }: TextControllerProps)
         }
       `}
     >
-      <button
+      <Button
         type="button"
         css={css`
           background-color: ${textStates.includes(BOLD) ? "lightgray" : "#f9f9f9"};
@@ -44,8 +46,8 @@ export function TextController({ textStates, indentState }: TextControllerProps)
         }}
       >
         𝐁
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
         css={css`
           background-color: ${textStates.includes(ITALIC) ? "lightgray" : "#f9f9f9"};
@@ -55,8 +57,8 @@ export function TextController({ textStates, indentState }: TextControllerProps)
         }}
       >
         𝐼
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
         css={css`
           background-color: ${textStates.includes(STRIKE) ? "lightgray" : "#f9f9f9"};
@@ -66,8 +68,8 @@ export function TextController({ textStates, indentState }: TextControllerProps)
         }}
       >
         ℔
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
         css={css`
           background-color: ${textStates.includes(UNDERLINE) ? "lightgray" : "#f9f9f9"};
@@ -77,8 +79,8 @@ export function TextController({ textStates, indentState }: TextControllerProps)
         }}
       >
         ⨱
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
         css={css`
           background-color: ${textStates.includes(ANCHOR) ? "lightgray" : "#f9f9f9"};
@@ -95,8 +97,8 @@ export function TextController({ textStates, indentState }: TextControllerProps)
         }}
       >
         🔗
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
         css={css`
           background-color: ${indentState === UNORDERED_LIST ? "lightgray" : "#f9f9f9"};
@@ -106,8 +108,8 @@ export function TextController({ textStates, indentState }: TextControllerProps)
         }}
       >
         ●
-      </button>
-      <button
+      </Button>
+      <Button
         type="button"
         css={css`
           background-color: ${indentState === ORDERED_LIST ? "lightgray" : "#f9f9f9"};
@@ -117,7 +119,7 @@ export function TextController({ textStates, indentState }: TextControllerProps)
         }}
       >
         №
-      </button>
+      </Button>
     </div>
   );
 }

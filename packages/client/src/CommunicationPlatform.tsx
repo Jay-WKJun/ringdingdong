@@ -7,6 +7,14 @@ import { useSetMessageStates } from "./contexts/MessageStates";
 import { Header } from "./Header";
 import { TextEditor } from "./TextEditor";
 
+const globalStyle = css`
+  width: 100%;
+  height: 100%;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+`;
+
 const chatContainerStyle = css`
   display: flex;
   flex-direction: column;
@@ -26,7 +34,7 @@ export function CommunicationPlatform() {
   const appConfig = useAppConfig();
 
   return (
-    <div style={{ height: "100vh" }}>
+    <div css={globalStyle}>
       <div css={chatContainerStyle}>
         <Header />
         <ChatHistory />

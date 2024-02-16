@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import React, { useState } from "react";
 
+import { Button } from "./components/Button";
 import { Spinner } from "./components/Spinner";
 import { useAppConfig } from "./contexts/AppConfig";
 import { useSetMessageStates } from "./contexts/MessageStates";
@@ -104,7 +105,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
         )}
         {sendState === "failed" && (
           <>
-            <button
+            <Button
               type="button"
               onClick={async () => {
                 setMessageStates((prev) => {
@@ -148,8 +149,8 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
               }}
             >
               📨
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               onClick={() => {
                 setMessageStates((prev) => {
@@ -159,7 +160,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
               }}
             >
               ❌
-            </button>
+            </Button>
           </>
         )}
         {isHover && !sendState && (
@@ -168,7 +169,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
               padding-bottom: 5px;
             `}
           >
-            <button
+            <Button
               type="button"
               css={css`
                 display: flex;
@@ -183,7 +184,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
               }}
             >
               📎
-            </button>
+            </Button>
           </div>
         )}
       </div>

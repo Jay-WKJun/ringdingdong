@@ -15,7 +15,6 @@ export function Header() {
   return (
     <div css={headerStyle}>
       <h4>Chat</h4>
-      <button type="button">X</button>
     </div>
   );
 }

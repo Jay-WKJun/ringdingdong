@@ -1,6 +1,8 @@
 import { css } from "@emotion/react";
 import React, { forwardRef } from "react";
 
+import { Button } from "../components/Button";
+
 interface AnchorControlProps {}
 
 export const AnchorControllerTemplate = forwardRef<HTMLTemplateElement, AnchorControlProps>((_, ref) => (
@@ -29,8 +31,8 @@ export const AnchorControllerTemplate = forwardRef<HTMLTemplateElement, AnchorCo
           margin-right: 5px;
         `}
       />
-      <button type="button">📝</button>
-      <button type="button">⏍</button>
+      <Button type="button">📝</Button>
+      <Button type="button">⏍</Button>
     </div>
   </template>
 ));
