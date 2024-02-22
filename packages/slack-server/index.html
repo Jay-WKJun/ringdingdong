@@ -7,22 +7,27 @@
     <h1>Server Test</h1>
     <p>Server is running on port 3000 with HTTP/2</p>
     <form id="form">
-      <input type="text" />
-      <button type="submit">Send</button>
+      <input id="input" type="text" />
+      <button type="submit" id="submit_button">Send</button>
     </form>
     <div id="sse"></div>
   </body>
   <script type="module" src="/dist/index.js"></script>
   <script>
-    document.getElementById('form').addEventListener('submit', function(event) {
+    fetch('https://localhost:3000/health').then(() => {
+      console.log('Server is running');
+    });
+    document.getElementById('submit_button').addEventListener('click', function(event) {
       event.preventDefault();
-      var message = event.target[0].value;
+      const message = document.getElementById('input').value;
       fetch('https://localhost:3000/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ message: message })
+      }).then((e) => {
+        console.log('res : ', e)
       });
     });
   </script>
@@ -30,6 +35,7 @@
     let closeTime = 0;
     const sseDataElement = document.getElementById('sse');
     const eventSource = new EventSource(`https://localhost:3000/slack/sse`, {
+      withCredentials: true,
       headers: {
         'Authorization': 'hi',
       }
