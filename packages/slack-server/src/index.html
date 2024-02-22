@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Server Tester</title>
+  </head>
+  <body>
+    <h1>Server Test</h1>
+    <p>Server is running on port 3000 with HTTP/2</p>
+    <form id="form">
+      <input type="text" />
+      <button type="submit">Send</button>
+    </form>
+    <div id="sse"></div>
+  </body>
+  <script>
+    document.getElementById('form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var message = event.target[0].value;
+      fetch('http://localhost:3000/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: message })
+      });
+    });
+  </script>
+  <script>
+    let closeTime = 0;
+    const sseDataElement = document.getElementById('sse');
+    const eventSource = new EventSource(`https://localhost:3000/slack/sse`, {
+      withCredentials: true,
+    });
+
+    eventSource.addEventListener('message', (event) => {
+      sseDataElement.innerHTML += event.data + '<br>';
+    });
+
+    eventSource.addEventListener('open', (event) => {
+      const openTime = Date.now();
+      console.log('open sse connection');
+      if (closeTime > 0) console.log('reopen At : ', openTime - closeTime);
+    });
+
+    // we can use custom event!
+    eventSource.addEventListener('custom', (event) => {
+      console.log('custom event', event.data);
+    });
+
+    eventSource.onerror = (error) => {
+      console.error('SSE Error:', error);
+      closeTime = Date.now();
+      console.log('close sse connection At : ', closeTime);
+    };
+  </script>
+</html>
