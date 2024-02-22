@@ -12,11 +12,12 @@
     </form>
     <div id="sse"></div>
   </body>
+  <script type="module" src="/dist/index.js"></script>
   <script>
     document.getElementById('form').addEventListener('submit', function(event) {
       event.preventDefault();
       var message = event.target[0].value;
-      fetch('http://localhost:3000/send', {
+      fetch('https://localhost:3000/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -29,7 +30,9 @@
     let closeTime = 0;
     const sseDataElement = document.getElementById('sse');
     const eventSource = new EventSource(`https://localhost:3000/slack/sse`, {
-      withCredentials: true,
+      headers: {
+        'Authorization': 'hi',
+      }
     });
 
     eventSource.addEventListener('message', (event) => {

@@ -1,6 +1,6 @@
 {
   "extends": "@ringdingdong/tsconfig/base.json",
-  "include": ["src"],
+  "include": ["src", "public/dev"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "strict": true,

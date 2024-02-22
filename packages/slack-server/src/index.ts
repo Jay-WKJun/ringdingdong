@@ -7,11 +7,13 @@ import { dirname } from "path";
 import spdy from "spdy";
 import { fileURLToPath } from "url";
 
-import { slackMessageSendController } from "./controllers/slackController";
+import { createNewSlackThreadController, slackMessageSendController } from "./controllers/slackController";
+import { addMessageListener, removeMessageListener } from "./controllers/slackListener";
 
 const __rootPath = process.cwd();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+const clientUrl = process.env.CLIENT_URL || "";
 const keyName = process.env.KEY_NAME;
 const certName = process.env.CERT_NAME;
 const jwtSecret = process.env.JWT_SECRET || "";
@@ -23,12 +25,15 @@ const app = express();
 const port = 3000;
 
 app.get("/", (req, res) => {
-  if (isDev) {
-    res.send(fs.readFileSync(`${__dirname}/index.html`, "utf8"));
-    return;
-  }
+  res.send("Success");
+});
 
-  res.send("Health Check Success");
+app.get("/health", (req, res) => {
+  try {
+    res.send("Health Check Success");
+  } catch {
+    res.status(500).send("Health check Failed");
+  }
 });
 
 app.post("/auth", async (req, res) => {
@@ -79,8 +84,10 @@ app.post("/new", async (req, res) => {
   // 새롭게 채팅을 시작하는 곳
   const id = req.body.id;
   const password = req.body.password;
+  const description = req.body.description;
   try {
     await db.push("/users", { [id]: password });
+    await createNewSlackThreadController({ id, description });
   } catch {
     res.status(500).send("Server Error");
   }
@@ -112,44 +119,47 @@ app.get("/slack/sse", async (req, res) => {
     }
   }
 
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Origin", clientUrl);
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
   res.flushHeaders();
 
-  let counter = 0;
-  const interValID = setInterval(() => {
-    counter++;
-    if (counter > 5) {
-      clearInterval(interValID);
-      res.write("retry: 1000\n");
-      res.end();
-      return;
-    }
-    console.log(counter);
-    res.write(`id: ${counter}\n`);
-    res.write(`data: ${JSON.stringify({ num: counter })}\n\n`);
-  }, 1000);
+  // JWT를 통해 누군지 특정해서 threadId를 받은 다음에, 그 threadId에 맞는 callback을 등록한다.
+
+  addMessageListener(1708600002.841869, ({ id, htmlText }) => {
+    res.write(`id: ${id}\n`);
+    res.write(`data: ${htmlText}\n\n`);
+  });
 
   // If client closes connection, stop sending events
   res.on("close", () => {
     console.log("client dropped me");
-    clearInterval(interValID);
+    removeMessageListener(1708600002.841869);
     res.end();
   });
 });
 
-// TODO: CORS 설정 추가 (보안 context)
-
 app.get("/slack/send", async (req, res) => {
+  // const message = req.body.message;
+  // if (!message) {
+  //   res.status(400).send("Bad Request");
+  //   return;
+  // }
+
   try {
-    await slackMessageSendController();
+    await slackMessageSendController({ text: "test!!!", threadId: "1708600002.841869" });
     res.send("Success");
   } catch {
     res.send("Error");
   }
 });
+
+if (isDev) {
+  app.get("/dev", (req, res) => {
+    res.send(fs.readFileSync(`${__dirname}/dev/index.js`, "utf8"));
+  });
+}
 
 const server = spdy.createServer(
   {
