@@ -37,6 +37,7 @@ module.exports = {
     'no-useless-escape': 'off',
     'no-cond-assign': 'off',
     'class-methods-use-this': 'off',
+    'prefer-destructuring': 'off',
 
     'unused-imports/no-unused-imports': 'error',
     'unused-imports/no-unused-vars': [
