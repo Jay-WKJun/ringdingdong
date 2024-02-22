@@ -3,15 +3,12 @@ import express from "express";
 import fs from "fs";
 import jwt from "jsonwebtoken";
 import { JsonDB, Config } from "node-json-db";
-import { dirname } from "path";
 import spdy from "spdy";
-import { fileURLToPath } from "url";
 
-import { createNewSlackThreadController, slackMessageSendController } from "./controllers/slackController";
+import { createNewSlackThreadController } from "./controllers/slackController";
 import { addMessageListener, removeMessageListener } from "./controllers/slackListener";
 
 const __rootPath = process.cwd();
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const clientUrl = process.env.CLIENT_URL || "";
 const keyName = process.env.KEY_NAME;
@@ -24,12 +21,15 @@ const db = new JsonDB(new Config(`${__rootPath}/db/db.json`, true, true));
 const app = express();
 const port = 3000;
 
+app.use(express.json());
+
 app.get("/", (req, res) => {
   res.send("Success");
 });
 
 app.get("/health", (req, res) => {
   try {
+    res.setHeader("Access-Control-Allow-Origin", clientUrl);
     res.send("Health Check Success");
   } catch {
     res.status(500).send("Health check Failed");
@@ -120,6 +120,7 @@ app.get("/slack/sse", async (req, res) => {
   }
 
   res.setHeader("Access-Control-Allow-Origin", clientUrl);
+  res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
@@ -140,26 +141,31 @@ app.get("/slack/sse", async (req, res) => {
   });
 });
 
-app.get("/slack/send", async (req, res) => {
-  // const message = req.body.message;
-  // if (!message) {
-  //   res.status(400).send("Bad Request");
-  //   return;
-  // }
+app.options("/send", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", clientUrl);
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.send();
+});
+
+app.post("/send", async (req, res) => {
+  const message = req.body.message;
+  if (!message) {
+    res.status(400).send("Bad Request");
+    return;
+  }
+
+  res.setHeader("Access-Control-Allow-Origin", clientUrl);
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   try {
-    await slackMessageSendController({ text: "test!!!", threadId: "1708600002.841869" });
+    // await slackMessageSendController({ text: "test!!!", threadId: "1708600002.841869" });
     res.send("Success");
   } catch {
     res.send("Error");
   }
 });
-
-if (isDev) {
-  app.get("/dev", (req, res) => {
-    res.send(fs.readFileSync(`${__dirname}/dev/index.js`, "utf8"));
-  });
-}
 
 const server = spdy.createServer(
   {
