@@ -16,7 +16,7 @@ interface SlackThreadCreateControllerParam {
 export async function createNewSlackThreadController({ id, description }: SlackThreadCreateControllerParam) {
   try {
     // 새로운 스레드를 만든다.
-    await client.chat.postMessage({
+    return client.chat.postMessage({
       channel,
       text: `✋ id: ${id}\n\n😁 Introduce: ${description}`,
     });

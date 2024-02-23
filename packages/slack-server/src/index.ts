@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { JsonDB, Config } from "node-json-db";
 import spdy from "spdy";
 
-import { createNewSlackThreadController } from "./controllers/slackController";
+import { createNewSlackThreadController, slackMessageSendController } from "./controllers/slackController";
 import { addMessageListener, removeMessageListener } from "./controllers/slackListener";
 
 const __rootPath = process.cwd();
@@ -14,7 +14,6 @@ const clientUrl = process.env.CLIENT_URL || "";
 const keyName = process.env.KEY_NAME;
 const certName = process.env.CERT_NAME;
 const jwtSecret = process.env.JWT_SECRET || "";
-const isDev = process.env.DEV === "true";
 
 const db = new JsonDB(new Config(`${__rootPath}/db/db.json`, true, true));
 
@@ -36,6 +35,13 @@ app.get("/health", (req, res) => {
   }
 });
 
+app.options("/auth", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", clientUrl);
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.send();
+});
+
 app.post("/auth", async (req, res) => {
   // 토큰을 확인만 하는 곳
   const jwtToken = req.header("Authorization");
@@ -48,7 +54,8 @@ app.post("/auth", async (req, res) => {
     const decodedToken = jwt.verify(jwtToken, jwtSecret);
     const id = decodedToken.id;
     const password = decodedToken.password;
-    const recordedPassword = await db.getIndexValue("/users", id);
+    const recordedUserInfo = await getUserInfo(id);
+    const recordedPassword = recordedUserInfo.password;
 
     if (password !== recordedPassword) {
       // 등록된게 없으면 진행 X
@@ -57,6 +64,13 @@ app.post("/auth", async (req, res) => {
   } catch {
     res.status(401).send("Token expired or invalid");
   }
+});
+
+app.options("/refresh", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", clientUrl);
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.send();
 });
 
 app.post("/refresh", async (req, res) => {
@@ -68,7 +82,8 @@ app.post("/refresh", async (req, res) => {
     return;
   }
 
-  const recordedPassword = await db.getIndexValue("/users", id);
+  const recordedUserInfo = await getUserInfo(id);
+  const recordedPassword = recordedUserInfo.password;
 
   if (password !== recordedPassword) {
     // 등록된게 없으면 진행 X
@@ -80,43 +95,61 @@ app.post("/refresh", async (req, res) => {
   res.send({ token });
 });
 
+app.options("/new", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", clientUrl);
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.send();
+});
+
 app.post("/new", async (req, res) => {
   // 새롭게 채팅을 시작하는 곳
   const id = req.body.id;
   const password = req.body.password;
   const description = req.body.description;
   try {
-    await db.push("/users", { [id]: password });
-    await createNewSlackThreadController({ id, description });
+    await db.getData(`/users/${id}`);
+  } catch {
+    res.status(400).send("Already exist user");
+    return;
+  }
+
+  try {
+    const newThread = await createNewSlackThreadController({ id, description });
+    const threadId = newThread.ts as string;
+    await db.push(`/users/${id}`, JSON.stringify({ id, password, threadId }));
+
+    res.setHeader("Access-Control-Allow-Origin", clientUrl);
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+    const token = jwt.sign({ id, password }, jwtSecret, { expiresIn: "1d" });
+    res.send({ token });
   } catch {
     res.status(500).send("Server Error");
   }
-  res.send("Success");
 });
 
 app.get("/slack/sse", async (req, res) => {
-  // Authorization은 받은 password로 만들어진 JWT로 확인한다.
-  // JWT는 만료기한은 하루이다.
-  if (!isDev) {
-    const jwtToken = req.header("Authorization");
-    if (!jwtToken) {
-      res.status(400).send("Bad Request");
-      return;
-    }
+  const jwtToken = req.header("Authorization");
+  if (!jwtToken) {
+    res.status(400).send("Bad Request");
+    return;
+  }
 
-    try {
-      const decodedToken = jwt.verify(jwtToken, jwtSecret);
-      const id = decodedToken.id;
-      const password = decodedToken.password;
-      const recordedPassword = await db.getIndexValue("/users", id);
+  try {
+    const decodedToken = jwt.verify(jwtToken, jwtSecret);
+    const id = decodedToken.id;
+    const password = decodedToken.password;
+    const recordedUserInfo = await getUserInfo(id);
+    const recordedPassword = recordedUserInfo.password;
 
-      if (password !== recordedPassword) {
-        // 등록된게 없으면 진행 X
-        res.status(401).send("Unauthorized");
-      }
-    } catch {
-      res.status(401).send("Token expired or invalid");
+    if (password !== recordedPassword) {
+      // 등록된게 없으면 진행 X
+      res.status(401).send("Unauthorized");
     }
+  } catch {
+    res.status(401).send("Token expired or invalid");
   }
 
   res.setHeader("Access-Control-Allow-Origin", clientUrl);
@@ -125,8 +158,6 @@ app.get("/slack/sse", async (req, res) => {
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
   res.flushHeaders();
-
-  // JWT를 통해 누군지 특정해서 threadId를 받은 다음에, 그 threadId에 맞는 callback을 등록한다.
 
   addMessageListener(1708600002.841869, ({ id, htmlText }) => {
     res.write(`id: ${id}\n`);
@@ -149,10 +180,34 @@ app.options("/send", (req, res) => {
 });
 
 app.post("/send", async (req, res) => {
+  const _jwtToken = req.header("Authorization");
   const message = req.body.message;
+  if (!_jwtToken) {
+    res.status(400).send("Bad Request");
+    return;
+  }
+  const jwtToken = _jwtToken.replace(/^"(.*)"$/, "").replace(/^Bearer[\s]*/, "");
   if (!message) {
     res.status(400).send("Bad Request");
     return;
+  }
+
+  const decodedToken = jwt.verify(jwtToken, jwtSecret);
+  let recordedThreadId;
+
+  try {
+    const id = decodedToken.id;
+    const password = decodedToken.password;
+    const recordedUserInfo = await getUserInfo(id);
+    const recordedPassword = recordedUserInfo.password;
+    recordedThreadId = recordedUserInfo.threadId;
+
+    if (password !== recordedPassword) {
+      // 등록된게 없으면 진행 X
+      res.status(401).send("Unauthorized");
+    }
+  } catch {
+    res.status(401).send("Token expired or invalid");
   }
 
   res.setHeader("Access-Control-Allow-Origin", clientUrl);
@@ -160,12 +215,16 @@ app.post("/send", async (req, res) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   try {
-    // await slackMessageSendController({ text: "test!!!", threadId: "1708600002.841869" });
+    await slackMessageSendController({ text: message, threadId: recordedThreadId });
     res.send("Success");
   } catch {
     res.send("Error");
   }
 });
+
+async function getUserInfo(id: string) {
+  return JSON.parse((await db.getData(`/users/${id}`)) as string);
+}
 
 const server = spdy.createServer(
   {
@@ -182,3 +241,9 @@ server.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
   console.log("SSL enabled");
 });
+
+async function test() {
+  const aa = await db.getData("/test");
+  console.log("aa", aa);
+}
+test();
