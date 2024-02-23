@@ -44,3 +44,6 @@ memo.md
 # keys
 *.cert
 *.key
+
+# Server Store
+packages/slack-server/db/*
