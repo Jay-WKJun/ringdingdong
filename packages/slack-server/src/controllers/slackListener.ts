@@ -1,10 +1,12 @@
 import { App } from "@slack/bolt";
 import slackMarkdown from "slack-markdown";
 
+import { SLACK_SIGNING_SECRET, SLACK_BOT_TOKEN, SLACK_APP_TOKEN } from "@/utils/env";
+
 const bolt = new App({
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  token: process.env.SLACK_BOT_TOKEN,
-  appToken: process.env.SLACK_APP_TOKEN,
+  signingSecret: SLACK_SIGNING_SECRET,
+  token: SLACK_BOT_TOKEN,
+  appToken: SLACK_APP_TOKEN,
   socketMode: true,
 });
 
@@ -23,6 +25,7 @@ const messageListener: { [threadId: string]: MessageListener } = {};
   console.log("⚡️ Bolt app started");
 
   bolt.message(async ({ message }) => {
+    console.log("message : ", message);
     const threadId = message.thread_ts as string;
     const type = message.type;
 

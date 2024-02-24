@@ -1,43 +1,40 @@
-import { WebClient, LogLevel } from "@slack/web-api";
+import { getUserInfo, setUserInfo } from "@/services/db";
+import { createNewSlackThread, sendSlackMessage } from "@/services/slack";
 
-const botToken = process.env.SLACK_BOT_TOKEN as string;
-const channel = process.env.SLACK_CHANNEL_ID as string;
+import { createToken, verifyToken } from "./tokenController";
 
-const client = new WebClient(botToken, {
-  // LogLevel can be imported and used to make debugging simpler
-  logLevel: LogLevel.DEBUG,
-});
+export function checkAndDecodeTokenController(token: string) {
+  return verifyToken(token);
+}
 
-interface SlackThreadCreateControllerParam {
+export async function isUserExist({ id, password }: { id: string; password: string }) {
+  const recordedUserInfo = await getUserInfo(id);
+  return recordedUserInfo?.password === password;
+}
+
+export function createTokenController({ id, password }: { id: string; password: string }) {
+  return createToken(id, password);
+}
+
+export async function createNewSlackThreadController({
+  id,
+  password,
+  description,
+}: {
   id: string;
+  password: string;
   description: string;
+}) {
+  const newThread = await createNewSlackThread({ id, description });
+  const threadId = newThread.ts as string;
+  await setUserInfo(id, { id, password, threadId });
 }
 
-export async function createNewSlackThreadController({ id, description }: SlackThreadCreateControllerParam) {
-  try {
-    // 새로운 스레드를 만든다.
-    return client.chat.postMessage({
-      channel,
-      text: `✋ id: ${id}\n\n😁 Introduce: ${description}`,
-    });
-  } catch {
-    throw new Error("Slack Thread Create Error");
+export async function slackMessageSendController(id: string, text: string) {
+  const userInfo = await getUserInfo(id);
+  if (!userInfo) {
+    throw new Error("User not found");
   }
-}
 
-interface MessagePostControllerParam {
-  text: string;
-  threadId: string;
-}
-
-export async function slackMessageSendController({ text, threadId }: MessagePostControllerParam) {
-  try {
-    await client.chat.postMessage({
-      channel,
-      thread_ts: threadId,
-      text,
-    });
-  } catch (e) {
-    throw new Error("Slack Message POST Error");
-  }
+  return sendSlackMessage({ text, threadId: userInfo?.threadId });
 }
