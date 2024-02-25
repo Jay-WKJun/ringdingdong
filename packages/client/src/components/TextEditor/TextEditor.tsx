@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import React, { useCallback, useRef, useState } from "react";
+import React, { KeyboardEvent, useCallback, useRef, useState } from "react";
 
 import { Button } from "@/components/Button";
 import { bubbleAllTagName } from "@/utils/dom";
@@ -24,7 +24,7 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
   const [textStates, setTextStates] = useState<typeof TEXT_STATES>([]);
   const [indentState, setIndentState] = useState<(typeof TEXT_INDENTS)[number]>("");
 
-  const sendMessage = () => {
+  const sendMessage = useCallback(() => {
     if (!textInputRef.current) return;
     const message = textInputRef.current.innerHTML;
     onSubmit?.(message);
@@ -32,7 +32,40 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
     textInputRef.current.innerHTML = "";
 
     // TODO: send message to server
-  };
+  }, [onSubmit]);
+
+  const handleCollapsedSelect = useCallback(({ selection }: SelectEventParameters) => {
+    setTextStates([]);
+    const text = selection.anchorNode?.textContent || "";
+    if (/(^|\n)[-][\s].*/.test(text)) {
+      document.execCommand("insertUnorderedList");
+      selection.anchorNode!.textContent = text.replace(/[-][\s]+/, "") || "";
+      return;
+    }
+    if (/(^|\n)[\d][.][\s].*/.test(text)) {
+      document.execCommand("insertOrderedList");
+      selection.anchorNode!.textContent = text.replace(/[\d][.][\s]+/, "") || "";
+    }
+  }, []);
+
+  const handleNonCollapsedSelect = useCallback(({ event, selection }: SelectEventParameters) => {
+    const textStateElements = getTextStateElements(selection, event.target as HTMLElement, new Set(TEXT_STATES));
+    setTextStates(textStateElements);
+  }, []);
+
+  const handleTextInputSelect = useCallback(({ event, selection }: SelectEventParameters) => {
+    const textIndentElements = getTextStateElements(selection, event.target as HTMLElement, new Set(TEXT_INDENTS));
+    setIndentState(textIndentElements[0] || "");
+  }, []);
+
+  const handleTextInputClick = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const clickTargetElement = e.target as HTMLElement | null;
+    if (clickTargetElement?.tagName === ANCHOR) {
+      if (!anchorControlTemplateRef.current) return;
+      const anchorElement = clickTargetElement as HTMLAnchorElement;
+      appendAnchorControl({ anchorElement, anchorControlTemplateElement: anchorControlTemplateRef.current });
+    }
+  }, []);
 
   return (
     <div
@@ -44,11 +77,14 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
         box-sizing: border-box;
       `}
       ref={textEditorWrapperRef}
-      onKeyDown={(e) => {
-        if (e.shiftKey && e.key === "Enter") {
-          sendMessage();
-        }
-      }}
+      onKeyDown={useCallback(
+        (e: KeyboardEvent<HTMLDivElement>) => {
+          if (e.shiftKey && e.key === "Enter") {
+            sendMessage();
+          }
+        },
+        [sendMessage],
+      )}
     >
       <TextController textStates={textStates} indentState={indentState} />
       <div
@@ -61,43 +97,10 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
       >
         <TextInput
           ref={textInputRef}
-          onCollapsedSelect={useCallback(({ selection }: SelectEventParameters) => {
-            setTextStates([]);
-            const text = selection.anchorNode?.textContent || "";
-            if (/(^|\n)[-][\s].*/.test(text)) {
-              document.execCommand("insertUnorderedList");
-              selection.anchorNode!.textContent = text.replace(/[-][\s]+/, "") || "";
-              return;
-            }
-            if (/(^|\n)[\d][.][\s].*/.test(text)) {
-              document.execCommand("insertOrderedList");
-              selection.anchorNode!.textContent = text.replace(/[\d][.][\s]+/, "") || "";
-            }
-          }, [])}
-          onNonCollapsedSelect={useCallback(({ event, selection }: SelectEventParameters) => {
-            const textStateElements = getTextStateElements(
-              selection,
-              event.target as HTMLElement,
-              new Set(TEXT_STATES),
-            );
-            setTextStates(textStateElements);
-          }, [])}
-          onSelect={useCallback(({ event, selection }: SelectEventParameters) => {
-            const textIndentElements = getTextStateElements(
-              selection,
-              event.target as HTMLElement,
-              new Set(TEXT_INDENTS),
-            );
-            setIndentState(textIndentElements[0] || "");
-          }, [])}
-          onClick={useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            const clickTargetElement = e.target as HTMLElement | null;
-            if (clickTargetElement?.tagName === ANCHOR) {
-              if (!anchorControlTemplateRef.current) return;
-              const anchorElement = clickTargetElement as HTMLAnchorElement;
-              appendAnchorControl({ anchorElement, anchorControlTemplateElement: anchorControlTemplateRef.current });
-            }
-          }, [])}
+          onCollapsedSelect={handleCollapsedSelect}
+          onNonCollapsedSelect={handleNonCollapsedSelect}
+          onSelect={handleTextInputSelect}
+          onClick={handleTextInputClick}
         />
         <div
           css={css`
@@ -115,9 +118,9 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
             css={css`
               height: 3em;
             `}
-            onClick={() => {
+            onClick={useCallback(() => {
               sendMessage();
-            }}
+            }, [sendMessage])}
           >
             📨
           </Button>
