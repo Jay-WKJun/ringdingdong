@@ -2,17 +2,17 @@ if (!fetch) {
   throw new Error("Need fetch API to run this code");
 }
 
-interface SendMessageParams {
+interface PostMessageParams {
   serverUrl: string;
   tempId: string;
   message: string;
 }
 
-export async function sendMessage({
+export async function postMessage({
   serverUrl,
   tempId,
   message,
-}: SendMessageParams) {
+}: PostMessageParams) {
   try {
     return fetch(`${serverUrl}/1/message`, {
       method: "POST",

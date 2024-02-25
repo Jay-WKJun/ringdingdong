@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import React, { useCallback, useState } from "react";
 
+import { postMessage } from "@/apis/messageApis";
 import { useAppConfig, useSetMessageStates } from "@/contexts";
 import type { Message, MessageSendState } from "@/types";
 
@@ -11,7 +12,7 @@ import { SendFailController } from "./SendFailController";
 import { SendLoader } from "./SendLoader";
 
 interface ChatProps {
-  tempId?: number;
+  tempId?: string;
   sendState?: MessageSendState;
   message: Message;
 }
@@ -23,6 +24,8 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
   const appConfig = useAppConfig();
 
   const handleResendButtonClick = useCallback(async () => {
+    if (!tempId || sendState !== "failed") return;
+
     setMessageStates((prev) => {
       if (!prev) return prev;
       return prev.map((state) => {
@@ -34,13 +37,11 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
     });
 
     try {
-      const res = await fetch(`${appConfig.serverUrl}/1/message`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ tempId, text: message.message }),
-      }).then((res) => res.json());
+      const res = await postMessage({
+        serverUrl: appConfig.serverUrl,
+        tempId,
+        message: message.message,
+      });
 
       setMessageStates((prev) => {
         if (!prev) return prev;
@@ -62,7 +63,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
         });
       });
     }
-  }, [appConfig.serverUrl, message, setMessageStates, tempId]);
+  }, [appConfig.serverUrl, message, sendState, setMessageStates, tempId]);
 
   const handleDeleteButtonClick = useCallback(() => {
     setMessageStates((prev) => {

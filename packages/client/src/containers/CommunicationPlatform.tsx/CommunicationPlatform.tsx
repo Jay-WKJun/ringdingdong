@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import React, { useCallback } from "react";
 
-import { sendMessage } from "@/apis/messageApis";
+import { postMessage } from "@/apis/messageApis";
 import { TextEditor } from "@/components";
 import { useAppConfig, useSetMessageStates } from "@/contexts";
 import { Header } from "@/Header";
@@ -67,7 +67,7 @@ export function CommunicationPlatform() {
         ];
       });
 
-      sendMessage({ serverUrl: appConfig.serverUrl, message: text, tempId })
+      postMessage({ serverUrl: appConfig.serverUrl, message: text, tempId })
         .then((res) =>
           setMessageState(
             (prev) =>
