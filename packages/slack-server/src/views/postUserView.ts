@@ -16,8 +16,8 @@ export const postUser: RequestHandler = async (req, res) => {
     return;
   }
 
-  if (await isUserExist({ id, password })) {
-    res.status(400).send("Already exist user");
+  if (!(await isUserExist({ id, password }))) {
+    res.status(403).send("User Exist");
     return;
   }
 

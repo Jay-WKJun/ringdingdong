@@ -1,10 +1,15 @@
 import { getUserInfo, setUserInfo } from "@/services/db";
-import { createNewSlackThread, sendSlackMessage } from "@/services/slack";
+import {
+  createNewSlackThread,
+  getSlackThreadMessages,
+  sendSlackMessage,
+} from "@/services/slack";
 
 import { createToken, verifyToken } from "./tokenController";
 
 export function checkAndDecodeTokenController(token: string) {
-  return verifyToken(token);
+  const jwtToken = token.replace(/^"(.*)"$/, "").replace(/^Bearer[\s]*/, "");
+  return verifyToken(jwtToken);
 }
 
 export async function isUserExist({
@@ -49,4 +54,13 @@ export async function slackMessageSendController(id: string, text: string) {
   }
 
   return sendSlackMessage({ text, threadId: userInfo?.threadId });
+}
+
+export async function getSlackThreadHistories(id: string) {
+  const userInfo = await getUserInfo(id);
+  if (!userInfo) {
+    return null;
+  }
+
+  return getSlackThreadMessages(userInfo.threadId);
 }

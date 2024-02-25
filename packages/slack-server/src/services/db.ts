@@ -11,8 +11,13 @@ export type UserInfo = {
 };
 
 export async function getUserInfo(id: string) {
-  const userInfo = (await db.getData(`/users/${id}`)) as string;
-  if (!userInfo) {
+  let userInfo: string;
+  try {
+    userInfo = (await db.getData(`/users/${id}`)) as string;
+    if (!userInfo) {
+      return null;
+    }
+  } catch {
     return null;
   }
 

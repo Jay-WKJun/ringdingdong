@@ -14,7 +14,9 @@ export const postAuthToken: RequestHandler = async (req, res) => {
 
   const decodedToken = checkAndDecodeTokenController(jwtToken);
 
-  if (await isUserExist(decodedToken)) {
+  if (!(await isUserExist(decodedToken))) {
     res.status(401).send("Unauthorized");
   }
+
+  res.status(204);
 };

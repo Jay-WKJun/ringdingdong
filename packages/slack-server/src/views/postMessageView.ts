@@ -8,11 +8,7 @@ import {
 import { CLIENT_URL } from "@/utils/env";
 
 export const postMessage: RequestHandler = async (req, res) => {
-  const _jwtToken = req.header("Authorization");
-  const jwtToken = _jwtToken
-    ?.replace(/^"(.*)"$/, "")
-    .replace(/^Bearer[\s]*/, "");
-
+  const jwtToken = req.header("Authorization");
   const tempId = req.body.tempId;
   const message = req.body.message;
   if (!jwtToken || !message || !tempId) {

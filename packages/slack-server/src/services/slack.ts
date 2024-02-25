@@ -1,10 +1,10 @@
-import { WebClient, LogLevel } from "@slack/web-api";
+import { WebClient } from "@slack/web-api";
 
 import { SLACK_BOT_TOKEN, SLACK_CHANNEL_ID } from "@/utils/env";
 
 const client = new WebClient(SLACK_BOT_TOKEN, {
   // LogLevel can be imported and used to make debugging simpler
-  logLevel: LogLevel.DEBUG,
+  // logLevel: LogLevel.DEBUG,
 });
 
 interface CreateNewSlackThreadParam {
@@ -43,5 +43,44 @@ export async function sendSlackMessage({
     });
   } catch (e) {
     throw new Error("Slack Message POST Error");
+  }
+}
+
+async function getSlackThreadId(threadId: string) {
+  try {
+    const result = await client.conversations.history({
+      channel: SLACK_CHANNEL_ID,
+    });
+
+    const conversationHistory = result.messages;
+
+    const targetThread = conversationHistory?.find(
+      (history) => history.ts === threadId,
+    );
+    if (targetThread) {
+      return targetThread.ts;
+    }
+
+    return null;
+  } catch (error) {
+    throw new Error("Slack Thread Id GET Error");
+  }
+}
+
+export async function getSlackThreadMessages(threadId: string) {
+  const slackThreadId = getSlackThreadId(threadId);
+  if (!slackThreadId) return null;
+
+  try {
+    const result = await client.conversations.replies({
+      channel: SLACK_CHANNEL_ID,
+      ts: threadId,
+    });
+
+    const conversationHistory = result.messages;
+
+    return conversationHistory;
+  } catch (error) {
+    throw new Error("Slack Thread Messages GET Error");
   }
 }

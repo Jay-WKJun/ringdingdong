@@ -13,6 +13,7 @@
           <button type="submit" id="submit_button">Send</button>
         </form>
         <div id="sse"></div>
+        <div id="history"></div>
       </div>
       <div>
         <h1>Token test</h1>
@@ -45,7 +46,7 @@
       const id = document.getElementById('new_id').value;
       const pw = document.getElementById('new_pw').value;
       const des = document.getElementById('new_des').value;
-      fetch('https://localhost:3000/new', {
+      fetch('https://localhost:3000/user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -68,7 +69,7 @@
       event.preventDefault();
       const id = document.getElementById('refresh_id').value;
       const pw = document.getElementById('refresh_pw').value;
-      fetch('https://localhost:3000/refresh', {
+      fetch('https://localhost:3000/refresh_token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -88,7 +89,7 @@
         console.log('no token');
         return;
       }
-      fetch('https://localhost:3000/auth', {
+      fetch('https://localhost:3000/auth_token', {
         method: 'GET',
         headers: {
           'Authorization': token,
@@ -99,7 +100,7 @@
     });
   </script>
   <script>
-    fetch('https://localhost:3000/health').then(() => {
+    fetch('https://localhost:3000/health_check').then(() => {
       console.log('Server is running');
     });
 
@@ -107,7 +108,7 @@
       event.preventDefault();
       const message = document.getElementById('input').value;
       const token = await localStorage.getItem('token');
-      fetch('https://localhost:3000/send', {
+      fetch('https://localhost:3000/message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -149,5 +150,15 @@
     //   closeTime = Date.now();
     //   console.log('close sse connection At : ', closeTime);
     // };
+  </script>
+  <script>
+    const historyElement = document.getElementById('history');
+    const token = await localStorage.getItem('token');
+    fetch('https://localhost:3000/messages', {
+      method: 'GET',
+      headers: {
+        'Authorization': token,
+      }
+    }).then((res) => res.json()).then((res) => console.log(res));
   </script>
 </html>

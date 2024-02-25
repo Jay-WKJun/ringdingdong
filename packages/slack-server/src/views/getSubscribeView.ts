@@ -11,10 +11,7 @@ import {
 import { CLIENT_URL } from "@/utils/env";
 
 export const getSubscribe: RequestHandler = async (req, res) => {
-  const _jwtToken = req.header("Authorization");
-  const jwtToken = _jwtToken
-    ?.replace(/^"(.*)"$/, "")
-    .replace(/^Bearer[\s]*/, "");
+  const jwtToken = req.header("Authorization");
   if (!jwtToken) {
     res.status(400).send("Bad Request");
     return;

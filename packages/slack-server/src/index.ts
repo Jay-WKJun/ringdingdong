@@ -12,12 +12,10 @@ import {
   getHealthCheck,
   getSubscribe,
 } from "./views";
+import { getMessages } from "./views/getMessages";
 
 const app = express();
 const port = 3000;
-
-// TODO: 메세지 수정 api
-// TODO: 전체 메세지 받아오는 api
 
 app.use(express.json());
 
@@ -28,6 +26,8 @@ app.get("/", (req, res) => {
 app.get("/health_check", getHealthCheck);
 
 app.get("/subscribe", getSubscribe);
+
+app.get("/messages", getMessages);
 
 app.options("/auth_token", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
@@ -77,6 +77,6 @@ const server = spdy.createServer(
 );
 
 server.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running at https://localhost:${port}`);
   console.log("SSL enabled");
 });
