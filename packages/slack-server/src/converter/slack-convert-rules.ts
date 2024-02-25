@@ -6,7 +6,8 @@ export const slackConvertRules: ConvertRules = {
     domTagName: "a",
     customMarkLangPattern: /<(.*)\|(.*)>/g,
     toDom: (...groups) => `<a href="${groups[0]}">${groups[1]}</a>`,
-    toCustomMarkLang: (attributes, content) => `<${attributes.href || ""}|${content}>`,
+    toCustomMarkLang: (attributes, content) =>
+      `<${attributes.href || ""}|${content}>`,
   },
   bold: {
     domTagName: "b",

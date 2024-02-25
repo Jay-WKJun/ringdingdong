@@ -5,7 +5,10 @@ import { Button } from "@/components/Button";
 
 interface AnchorControlProps {}
 
-export const AnchorControllerTemplate = forwardRef<HTMLTemplateElement, AnchorControlProps>((_, ref) => (
+export const AnchorControllerTemplate = forwardRef<
+  HTMLTemplateElement,
+  AnchorControlProps
+>((_, ref) => (
   <template ref={ref}>
     <div
       css={css`
@@ -47,7 +50,9 @@ export function appendAnchorControl({
   anchorElement: HTMLAnchorElement;
   anchorControlTemplateElement: HTMLTemplateElement;
 }) {
-  const cloneNode = anchorControlTemplateElement.childNodes[0]!.cloneNode(true) as HTMLElement;
+  const cloneNode = anchorControlTemplateElement.childNodes[0]!.cloneNode(
+    true,
+  ) as HTMLElement;
   const hrefInput = cloneNode.childNodes[0] as HTMLInputElement;
   // href 값 set
   hrefInput.value = anchorElement.href;

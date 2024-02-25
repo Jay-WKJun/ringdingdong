@@ -20,15 +20,19 @@ class Converter {
       const matchedTagInfos = this.domParser.getMatchedTags(domString);
       console.log("matchedTagInfos", this.domParser.domRegex, matchedTagInfos);
       matchedTagInfos?.forEach(({ matchedString, content, attributes }) => {
-        customMarkString = customMarkString.replace(matchedString, rule.toCustomMarkLang(attributes, content));
+        customMarkString = customMarkString.replace(
+          matchedString,
+          rule.toCustomMarkLang(attributes, content),
+        );
       });
       console.log("customMarkString", customMarkString);
       return customMarkString;
     };
 
     this.convertToDom = (customMarkString: string) => {
-      const newString = customMarkString.replace(new RegExp(rule.customMarkLangPattern, "g"), (_, ...groups) =>
-        rule.toDom(...groups),
+      const newString = customMarkString.replace(
+        new RegExp(rule.customMarkLangPattern, "g"),
+        (_, ...groups) => rule.toDom(...groups),
       );
       return newString;
     };
@@ -36,12 +40,21 @@ class Converter {
 }
 
 export function getConverters(convertRules: ConvertRules = slackConvertRules) {
-  const _converters = mapObjectValues(convertRules, (value) => new Converter(value));
+  const _converters = mapObjectValues(
+    convertRules,
+    (value) => new Converter(value),
+  );
   const converters = Object.values(_converters);
   return {
     convertToDomString: (customMarkLang: string) =>
-      converters.reduce((prev, converter) => converter.convertToDom(prev), customMarkLang),
+      converters.reduce(
+        (prev, converter) => converter.convertToDom(prev),
+        customMarkLang,
+      ),
     convertToCustomMarkLang: (domString: string) =>
-      converters.reduce((prev, converter) => converter.convertToCustomMarkLang(prev), domString),
+      converters.reduce(
+        (prev, converter) => converter.convertToCustomMarkLang(prev),
+        domString,
+      ),
   };
 }

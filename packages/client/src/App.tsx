@@ -1,7 +1,10 @@
 import React from "react";
 
 import { CommunicationPlatform } from "./containers";
-import { AppConfigContextProvider, MessageStatesContextProvider } from "./contexts";
+import {
+  AppConfigContextProvider,
+  MessageStatesContextProvider,
+} from "./contexts";
 
 interface AppProps {
   serverUrl: string;

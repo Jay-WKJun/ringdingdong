@@ -1,7 +1,11 @@
 import { App } from "@slack/bolt";
 import slackMarkdown from "slack-markdown";
 
-import { SLACK_SIGNING_SECRET, SLACK_BOT_TOKEN, SLACK_APP_TOKEN } from "@/utils/env";
+import {
+  SLACK_SIGNING_SECRET,
+  SLACK_BOT_TOKEN,
+  SLACK_APP_TOKEN,
+} from "@/utils/env";
 
 const bolt = new App({
   signingSecret: SLACK_SIGNING_SECRET,
@@ -48,7 +52,10 @@ const messageListener: { [threadId: string]: MessageListener } = {};
   });
 })();
 
-export const addMessageListener = (threadId: number, callback: MessageListener) => {
+export const addMessageListener = (
+  threadId: number,
+  callback: MessageListener,
+) => {
   messageListener[threadId] = callback;
 };
 

@@ -12,7 +12,10 @@ interface CreateNewSlackThreadParam {
   description: string;
 }
 
-export function createNewSlackThread({ id, description }: CreateNewSlackThreadParam) {
+export function createNewSlackThread({
+  id,
+  description,
+}: CreateNewSlackThreadParam) {
   try {
     return client.chat.postMessage({
       channel: SLACK_CHANNEL_ID,
@@ -28,7 +31,10 @@ interface SendSlackMessageParam {
   threadId: string;
 }
 
-export async function sendSlackMessage({ text, threadId }: SendSlackMessageParam) {
+export async function sendSlackMessage({
+  text,
+  threadId,
+}: SendSlackMessageParam) {
   try {
     await client.chat.postMessage({
       channel: SLACK_CHANNEL_ID,

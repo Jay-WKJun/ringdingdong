@@ -1,6 +1,10 @@
 import { RequestHandler } from "express";
 
-import { createNewSlackThreadController, createTokenController, isUserExist } from "@/controllers/slackController";
+import {
+  createNewSlackThreadController,
+  createTokenController,
+  isUserExist,
+} from "@/controllers/slackController";
 import { CLIENT_URL } from "@/utils/env";
 
 export const postUser: RequestHandler = async (req, res) => {
@@ -24,7 +28,10 @@ export const postUser: RequestHandler = async (req, res) => {
 
     res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization",
+    );
     res.send({ token });
   } catch {
     res.status(500).send("Server Error");

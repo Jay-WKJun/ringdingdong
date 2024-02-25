@@ -121,7 +121,9 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
             onResendButtonClick={handleResendButtonClick}
           />
         )}
-        {isHover && !sendState && <ChatController onCopyButtonClick={handleCopyButtonClick} />}
+        {isHover && !sendState && (
+          <ChatController onCopyButtonClick={handleCopyButtonClick} />
+        )}
       </div>
     </div>
   );

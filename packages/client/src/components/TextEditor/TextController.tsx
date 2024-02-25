@@ -3,14 +3,25 @@ import React from "react";
 
 import { Button } from "@/components/Button";
 
-import { ANCHOR, BOLD, ITALIC, ORDERED_LIST, STRIKE, UNDERLINE, UNORDERED_LIST } from "./constants";
+import {
+  ANCHOR,
+  BOLD,
+  ITALIC,
+  ORDERED_LIST,
+  STRIKE,
+  UNDERLINE,
+  UNORDERED_LIST,
+} from "./constants";
 
 interface TextControllerProps {
   textStates: string[];
   indentState: string;
 }
 
-export function TextController({ textStates, indentState }: TextControllerProps) {
+export function TextController({
+  textStates,
+  indentState,
+}: TextControllerProps) {
   return (
     <div
       css={css`
@@ -39,7 +50,9 @@ export function TextController({ textStates, indentState }: TextControllerProps)
       <Button
         type="button"
         css={css`
-          background-color: ${textStates.includes(BOLD) ? "lightgray" : "#f9f9f9"};
+          background-color: ${textStates.includes(BOLD)
+            ? "lightgray"
+            : "#f9f9f9"};
         `}
         onClick={() => {
           document.execCommand("bold");
@@ -50,7 +63,9 @@ export function TextController({ textStates, indentState }: TextControllerProps)
       <Button
         type="button"
         css={css`
-          background-color: ${textStates.includes(ITALIC) ? "lightgray" : "#f9f9f9"};
+          background-color: ${textStates.includes(ITALIC)
+            ? "lightgray"
+            : "#f9f9f9"};
         `}
         onClick={() => {
           document.execCommand("italic");
@@ -61,7 +76,9 @@ export function TextController({ textStates, indentState }: TextControllerProps)
       <Button
         type="button"
         css={css`
-          background-color: ${textStates.includes(STRIKE) ? "lightgray" : "#f9f9f9"};
+          background-color: ${textStates.includes(STRIKE)
+            ? "lightgray"
+            : "#f9f9f9"};
         `}
         onClick={() => {
           document.execCommand("strikethrough");
@@ -72,7 +89,9 @@ export function TextController({ textStates, indentState }: TextControllerProps)
       <Button
         type="button"
         css={css`
-          background-color: ${textStates.includes(UNDERLINE) ? "lightgray" : "#f9f9f9"};
+          background-color: ${textStates.includes(UNDERLINE)
+            ? "lightgray"
+            : "#f9f9f9"};
         `}
         onClick={() => {
           document.execCommand("underline");
@@ -83,7 +102,9 @@ export function TextController({ textStates, indentState }: TextControllerProps)
       <Button
         type="button"
         css={css`
-          background-color: ${textStates.includes(ANCHOR) ? "lightgray" : "#f9f9f9"};
+          background-color: ${textStates.includes(ANCHOR)
+            ? "lightgray"
+            : "#f9f9f9"};
         `}
         onClick={() => {
           const isLinked = textStates.includes(ANCHOR);
@@ -93,7 +114,11 @@ export function TextController({ textStates, indentState }: TextControllerProps)
           }
 
           const url = window.prompt("Enter URL:");
-          document.execCommand("createLink", false, url || "https://www.google.com");
+          document.execCommand(
+            "createLink",
+            false,
+            url || "https://www.google.com",
+          );
         }}
       >
         🔗
@@ -101,7 +126,9 @@ export function TextController({ textStates, indentState }: TextControllerProps)
       <Button
         type="button"
         css={css`
-          background-color: ${indentState === UNORDERED_LIST ? "lightgray" : "#f9f9f9"};
+          background-color: ${indentState === UNORDERED_LIST
+            ? "lightgray"
+            : "#f9f9f9"};
         `}
         onClick={() => {
           document.execCommand("insertUnorderedList");
@@ -112,7 +139,9 @@ export function TextController({ textStates, indentState }: TextControllerProps)
       <Button
         type="button"
         css={css`
-          background-color: ${indentState === ORDERED_LIST ? "lightgray" : "#f9f9f9"};
+          background-color: ${indentState === ORDERED_LIST
+            ? "lightgray"
+            : "#f9f9f9"};
         `}
         onClick={() => {
           document.execCommand("insertUnorderedList");

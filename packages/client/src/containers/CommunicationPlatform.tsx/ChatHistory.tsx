@@ -2,7 +2,11 @@ import { css } from "@emotion/react";
 import React, { useEffect } from "react";
 
 import { Spinner } from "@/components";
-import { useAppConfig, useMessageStates, useSetMessageStates } from "@/contexts";
+import {
+  useAppConfig,
+  useMessageStates,
+  useSetMessageStates,
+} from "@/contexts";
 import type { Message } from "@/types";
 
 import { Chat } from "./Chat";
@@ -16,7 +20,9 @@ export function ChatHistory() {
     setTimeout(() => {
       fetch(`${appConfig.serverUrl}/1/messages`)
         .then((res) => res.json())
-        .then((res) => setMessageStates(res?.map((message: Message) => ({ message }) || [])));
+        .then((res) =>
+          setMessageStates(res?.map((message: Message) => ({ message }) || [])),
+        );
     }, 1000);
   }, [appConfig.serverUrl, setMessageStates]);
 
@@ -36,7 +42,12 @@ export function ChatHistory() {
     >
       {messageStates ? (
         messageStates.map(({ message, tempId, sendState }) => (
-          <Chat key={message.id ?? tempId} message={message} tempId={tempId} sendState={sendState} />
+          <Chat
+            key={message.id ?? tempId}
+            message={message}
+            tempId={tempId}
+            sendState={sendState}
+          />
         ))
       ) : (
         <div

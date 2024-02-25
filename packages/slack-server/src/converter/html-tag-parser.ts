@@ -37,7 +37,12 @@ export class HTMLTagParser {
           attributes[key] = value;
         });
 
-      matchedTags.push({ matchedString, tagName: this.tagName, attributes, content });
+      matchedTags.push({
+        matchedString,
+        tagName: this.tagName,
+        attributes,
+        content,
+      });
     } while ((match = this.domRegex.exec(htmlString)) !== null);
 
     return matchedTags;

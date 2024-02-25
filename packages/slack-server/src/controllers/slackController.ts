@@ -7,12 +7,24 @@ export function checkAndDecodeTokenController(token: string) {
   return verifyToken(token);
 }
 
-export async function isUserExist({ id, password }: { id: string; password: string }) {
+export async function isUserExist({
+  id,
+  password,
+}: {
+  id: string;
+  password: string;
+}) {
   const recordedUserInfo = await getUserInfo(id);
   return recordedUserInfo?.password === password;
 }
 
-export function createTokenController({ id, password }: { id: string; password: string }) {
+export function createTokenController({
+  id,
+  password,
+}: {
+  id: string;
+  password: string;
+}) {
   return createToken(id, password);
 }
 

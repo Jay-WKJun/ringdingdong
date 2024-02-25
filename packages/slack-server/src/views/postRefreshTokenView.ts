@@ -1,6 +1,9 @@
 import { RequestHandler } from "express";
 
-import { isUserExist, createTokenController } from "@/controllers/slackController";
+import {
+  isUserExist,
+  createTokenController,
+} from "@/controllers/slackController";
 
 export const postRefreshToken: RequestHandler = async (req, res) => {
   const id = req.body.id;

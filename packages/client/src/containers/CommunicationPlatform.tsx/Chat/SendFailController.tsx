@@ -7,7 +7,10 @@ interface SendFailControllerProps {
   onDeleteButtonClick: () => void;
 }
 
-export function SendFailController({ onDeleteButtonClick, onResendButtonClick }: SendFailControllerProps) {
+export function SendFailController({
+  onDeleteButtonClick,
+  onResendButtonClick,
+}: SendFailControllerProps) {
   return (
     <>
       <Button type="button" onClick={onResendButtonClick}>

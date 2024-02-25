@@ -1,11 +1,17 @@
 import { RequestHandler } from "express";
 
-import { checkAndDecodeTokenController, isUserExist, slackMessageSendController } from "@/controllers/slackController";
+import {
+  checkAndDecodeTokenController,
+  isUserExist,
+  slackMessageSendController,
+} from "@/controllers/slackController";
 import { CLIENT_URL } from "@/utils/env";
 
 export const postMessage: RequestHandler = async (req, res) => {
   const _jwtToken = req.header("Authorization");
-  const jwtToken = _jwtToken?.replace(/^"(.*)"$/, "").replace(/^Bearer[\s]*/, "");
+  const jwtToken = _jwtToken
+    ?.replace(/^"(.*)"$/, "")
+    .replace(/^Bearer[\s]*/, "");
   const message = req.body.message;
   if (!jwtToken || !message) {
     res.status(400).send("Bad Request");

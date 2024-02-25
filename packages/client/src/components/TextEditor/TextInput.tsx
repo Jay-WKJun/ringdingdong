@@ -1,5 +1,11 @@
 import { css } from "@emotion/react";
-import { forwardRef, useCallback, SyntheticEvent, MouseEvent as ReactMouseEvent, memo } from "react";
+import {
+  forwardRef,
+  useCallback,
+  SyntheticEvent,
+  MouseEvent as ReactMouseEvent,
+  memo,
+} from "react";
 import sanitizeHTML from "sanitize-html";
 
 import { Parser } from "@/utils/parser";
@@ -18,7 +24,10 @@ interface TextInputProps {
 }
 
 const TextInputComponent = forwardRef<HTMLDivElement, TextInputProps>(
-  ({ initText, onCollapsedSelect, onNonCollapsedSelect, onSelect, onClick }, ref) => {
+  (
+    { initText, onCollapsedSelect, onNonCollapsedSelect, onSelect, onClick },
+    ref,
+  ) => {
     const handleInputSelect = useCallback(
       (e: SyntheticEvent<HTMLDivElement, Event>) => {
         if (!window) return;

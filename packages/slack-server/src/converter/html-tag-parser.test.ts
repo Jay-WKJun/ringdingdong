@@ -31,7 +31,8 @@ describe("HTMLTagParser", () => {
   });
 
   test("getMatchedTags should handle multiple matching tags", () => {
-    const htmlString = '<a href="https://example.com">Link 1</a><a href="https://example.org">Link 2</a>';
+    const htmlString =
+      '<a href="https://example.com">Link 1</a><a href="https://example.org">Link 2</a>';
     const expectedTags: MatchedTagInfo[] = [
       {
         matchedString: '<a href="https://example.com">Link 1</a>',

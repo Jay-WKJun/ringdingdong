@@ -1,6 +1,9 @@
 import { RequestHandler } from "express";
 
-import { checkAndDecodeTokenController, isUserExist } from "@/controllers/slackController";
+import {
+  checkAndDecodeTokenController,
+  isUserExist,
+} from "@/controllers/slackController";
 
 export const postAuthToken: RequestHandler = async (req, res) => {
   const jwtToken = req.header("Authorization");
