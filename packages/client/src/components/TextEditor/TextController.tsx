@@ -144,7 +144,7 @@ export function TextController({
             : "#f9f9f9"};
         `}
         onClick={() => {
-          document.execCommand("insertUnorderedList");
+          document.execCommand("insertOrderedList");
         }}
       >
         №
