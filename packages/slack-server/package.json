@@ -5,8 +5,8 @@
   "scripts": {
     "dev:client:build": "vite build",
     "dev:client": "pnpm dev:client:build && vite",
-    "dev": "DEV=true tsx ./src/index.ts",
     "start": "tsx ./src/index.ts",
+    "start:dev": "HTTP=1 tsx ./src/index.ts",
     "test": "jest",
     "generate-cert": "sh ./dev/cert/generate-cert.sh"
   },

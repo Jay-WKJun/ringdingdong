@@ -46,7 +46,7 @@
       const id = document.getElementById('new_id').value;
       const pw = document.getElementById('new_pw').value;
       const des = document.getElementById('new_des').value;
-      fetch('https://localhost:3000/user', {
+      fetch('http://localhost:3000/user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -69,7 +69,7 @@
       event.preventDefault();
       const id = document.getElementById('refresh_id').value;
       const pw = document.getElementById('refresh_pw').value;
-      fetch('https://localhost:3000/refresh_token', {
+      fetch('http://localhost:3000/refresh_token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -89,7 +89,7 @@
         console.log('no token');
         return;
       }
-      fetch('https://localhost:3000/auth_token', {
+      fetch('http://localhost:3000/auth_token', {
         method: 'GET',
         headers: {
           'Authorization': token,
@@ -100,7 +100,11 @@
     });
   </script>
   <script>
-    fetch('https://localhost:3000/health_check').then(() => {
+    fetch('http://localhost:3000').then(() => {
+      console.log('Server is running');
+    });
+
+    fetch('http://localhost:3000/health_check').then(() => {
       console.log('Server is running');
     });
 
@@ -108,7 +112,7 @@
       event.preventDefault();
       const message = document.getElementById('input').value;
       const token = await localStorage.getItem('token');
-      fetch('https://localhost:3000/message', {
+      fetch('http://localhost:3000/message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -123,7 +127,7 @@
   <script>
     // let closeTime = 0;
     // const sseDataElement = document.getElementById('sse');
-    // const eventSource = new EventSource(`https://localhost:3000/slack/sse`, {
+    // const eventSource = new EventSource(`http://localhost:3000/slack/sse`, {
     //   withCredentials: true,
     //   headers: {
     //     'Authorization': 'hi',
@@ -154,7 +158,7 @@
   <script>
     const historyElement = document.getElementById('history');
     const token = await localStorage.getItem('token');
-    fetch('https://localhost:3000/messages', {
+    fetch('http://localhost:3000/messages', {
       method: 'GET',
       headers: {
         'Authorization': token,
