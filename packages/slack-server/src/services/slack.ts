@@ -36,7 +36,7 @@ export async function sendSlackMessage({
   threadId,
 }: SendSlackMessageParam) {
   try {
-    await client.chat.postMessage({
+    return client.chat.postMessage({
       channel: SLACK_CHANNEL_ID,
       thread_ts: threadId,
       text,
