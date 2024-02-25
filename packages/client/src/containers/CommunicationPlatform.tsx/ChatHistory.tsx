@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import React, { useEffect } from "react";
 
+import { getMessages } from "@/apis/messageApis";
 import { Spinner } from "@/components";
 import {
   useAppConfig,
@@ -18,11 +19,9 @@ export function ChatHistory() {
 
   useEffect(() => {
     setTimeout(() => {
-      fetch(`${appConfig.serverUrl}/1/messages`)
-        .then((res) => res.json())
-        .then((res) =>
-          setMessageStates(res?.map((message: Message) => ({ message }) || [])),
-        );
+      getMessages({ serverUrl: appConfig.serverUrl }).then((res) =>
+        setMessageStates(res?.map((message: Message) => ({ message }) || [])),
+      );
     }, 1000);
   }, [appConfig.serverUrl, setMessageStates]);
 

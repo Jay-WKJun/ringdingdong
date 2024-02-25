@@ -26,3 +26,16 @@ export async function sendMessage({
     throw new Error(e);
   }
 }
+
+interface GetMessagesParams {
+  serverUrl: string;
+}
+
+export async function getMessages({ serverUrl }: GetMessagesParams) {
+  try {
+    return fetch(`${serverUrl}/1/messages`).then((res) => res.json());
+  } catch (e) {
+    // @ts-expect-error: error handling
+    throw new Error(e);
+  }
+}
