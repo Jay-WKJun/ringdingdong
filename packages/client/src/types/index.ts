@@ -14,7 +14,7 @@ export interface Message {
 export type MessageSendState = "sending" | "failed";
 
 export interface MessageState {
-  tempId?: number;
+  tempId?: string;
   sendState?: MessageSendState;
   message: Message;
 }

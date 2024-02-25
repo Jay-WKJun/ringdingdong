@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import React, { useCallback } from "react";
 
+import { sendMessage } from "@/apis/messageApis";
 import { TextEditor } from "@/components";
 import { useAppConfig, useSetMessageStates } from "@/contexts";
 import { Header } from "@/Header";
@@ -35,7 +36,7 @@ export function CommunicationPlatform() {
 
   const handleInputTextSubmit = useCallback(
     (text: string) => {
-      const tempId = Math.floor(Math.random() * 100000000);
+      const tempId = String(Math.floor(Math.random() * 100000000));
       setMessageState((prev) => {
         if (!prev)
           return [
@@ -66,14 +67,7 @@ export function CommunicationPlatform() {
         ];
       });
 
-      fetch(`${appConfig.serverUrl}/1/message`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ tempId, text }),
-      })
-        .then((res) => res.json())
+      sendMessage({ serverUrl: appConfig.serverUrl, message: text, tempId })
         .then((res) =>
           setMessageState(
             (prev) =>
