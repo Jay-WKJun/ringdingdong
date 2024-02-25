@@ -9,7 +9,6 @@ import {
   ITALIC,
   ORDERED_LIST,
   STRIKE,
-  UNDERLINE,
   UNORDERED_LIST,
 } from "./constants";
 
@@ -85,19 +84,6 @@ export function TextController({
         }}
       >
         ℔
-      </Button>
-      <Button
-        type="button"
-        css={css`
-          background-color: ${textStates.includes(UNDERLINE)
-            ? "lightgray"
-            : "#f9f9f9"};
-        `}
-        onClick={() => {
-          document.execCommand("underline");
-        }}
-      >
-        ⨱
       </Button>
       <Button
         type="button"
