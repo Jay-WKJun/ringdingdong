@@ -26,14 +26,26 @@ export const postMessage: RequestHandler = async (req, res) => {
   }
 
   try {
-    await slackMessageSendController(decodedToken.id, message);
+    const newSlackMessageResponse = await slackMessageSendController(
+      decodedToken.id,
+      message,
+    );
+
+    res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization",
+    );
+    res.send({
+      id: decodedToken.id,
+      type: newSlackMessageResponse.channel_type as string,
+      createdAt: newSlackMessageResponse.event_ts as string,
+      message,
+      tempId,
+      userId: decodedToken.id,
+    });
   } catch {
     res.status(404).send("User not found");
-    return;
   }
-
-  res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.send({ id: decodedToken.id, message, tempId });
 };

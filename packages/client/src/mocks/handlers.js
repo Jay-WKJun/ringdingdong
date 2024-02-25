@@ -7,7 +7,7 @@ const mockMessages = Array.from({ length: 10 }, (_, i) => ({
     i + 1
   }</s> aoisdnfa;okjsndf;oqjnwefjoknqwefkmqawefjonveivnbaeiljvnsldijncv`,
   createdAt: new Date().toISOString(),
-  isMyMessage: i % 2 === 0,
+  userId: i % 2 === 0 ? 1 : null,
 }));
 
 let id = 11;
@@ -16,8 +16,8 @@ let id = 11;
 // TODO: 헬스체크 API
 export const handlers = [
   http.get("/health", () => new HttpResponse(null, { status: 204 })),
-  http.get("/1/messages", () => HttpResponse.json(mockMessages)),
-  http.post("/1/message", async ({ request }) => {
+  http.get("/messages", () => HttpResponse.json(mockMessages)),
+  http.post("/message", async ({ request }) => {
     const reader = request.body.getReader();
     let body;
     await reader.read().then(function pump({ done, value }) {
@@ -38,7 +38,7 @@ export const handlers = [
         tempId: body.tempId,
         id: id++,
         createdAt: new Date().toISOString(),
-        isMyMessage: true,
+        userId: body.userId,
         message: body.text,
         type: "message",
       }),

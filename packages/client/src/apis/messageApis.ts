@@ -1,3 +1,5 @@
+import type { NewMessage, Message } from "@/types";
+
 if (!fetch) {
   throw new Error("Need fetch API to run this code");
 }
@@ -8,11 +10,13 @@ interface PostMessageParams {
   message: string;
 }
 
+interface PostMessageResponse extends NewMessage {}
+
 export async function postMessage({
   serverUrl,
   tempId,
   message,
-}: PostMessageParams) {
+}: PostMessageParams): Promise<PostMessageResponse> {
   try {
     return fetch(`${serverUrl}/message`, {
       method: "POST",
@@ -31,7 +35,11 @@ interface GetMessagesParams {
   serverUrl: string;
 }
 
-export async function getMessages({ serverUrl }: GetMessagesParams) {
+type GetMessagesResponse = Message[];
+
+export async function getMessages({
+  serverUrl,
+}: GetMessagesParams): Promise<GetMessagesResponse> {
   try {
     return fetch(`${serverUrl}/messages`).then((res) => res.json());
   } catch (e) {

@@ -8,9 +8,9 @@ interface AvatarProps {
 }
 
 export function Avatar({ message }: AvatarProps) {
-  const { isMyMessage, avatarUrl, id } = message;
+  const { userId, avatarUrl, id } = message;
   if (!avatarUrl) {
-    return <div>{isMyMessage ? "😁" : "✋"}</div>;
+    return <div>{userId == null ? "너" : "나"}</div>;
   }
 
   return (

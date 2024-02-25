@@ -80,7 +80,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
     <div
       css={css`
         display: flex;
-        flex-direction: ${message.isMyMessage ? "row-reverse" : "row"};
+        flex-direction: ${message.userId == null ? "row" : "row-reverse"};
         align-items: center;
         width: 100%;
         padding: 0 10px;
@@ -108,7 +108,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
       <div
         css={css`
           display: flex;
-          flex-direction: ${message.isMyMessage ? "row-reverse" : "row"};
+          flex-direction: ${message.userId == null ? "row" : "row-reverse"};
           align-items: flex-end;
           flex: 1;
           gap: 5px;

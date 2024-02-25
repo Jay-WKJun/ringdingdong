@@ -8,7 +8,11 @@ export interface Message {
   message: string;
   createdAt: string;
   avatarUrl?: string;
-  isMyMessage: boolean;
+  userId?: string;
+}
+
+export interface NewMessage extends Message {
+  tempId: string;
 }
 
 export type MessageSendState = "sending" | "failed";
