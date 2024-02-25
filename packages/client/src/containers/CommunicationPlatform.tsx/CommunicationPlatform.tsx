@@ -1,11 +1,11 @@
 import { css } from "@emotion/react";
 import React, { useCallback } from "react";
 
+import { TextEditor } from "@/components";
+import { useAppConfig, useSetMessageStates } from "@/contexts";
+import { Header } from "@/Header";
+
 import { ChatHistory } from "./ChatHistory";
-import { useAppConfig } from "./contexts/AppConfig";
-import { useSetMessageStates } from "./contexts/MessageStates";
-import { Header } from "./Header";
-import { TextEditor } from "./TextEditor";
 
 const globalStyle = css`
   width: 100%;

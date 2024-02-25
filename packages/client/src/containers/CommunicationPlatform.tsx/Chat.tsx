@@ -1,12 +1,10 @@
 import { css } from "@emotion/react";
 import React, { useState } from "react";
 
-import { Button } from "./components/Button";
-import { Spinner } from "./components/Spinner";
-import { useAppConfig } from "./contexts/AppConfig";
-import { useSetMessageStates } from "./contexts/MessageStates";
-import type { Message, MessageSendState } from "./types";
-import { Parser } from "./utils/parser";
+import { Button, Spinner } from "@/components";
+import { useAppConfig, useSetMessageStates } from "@/contexts";
+import type { Message, MessageSendState } from "@/types";
+import { Parser } from "@/utils/parser";
 
 interface ChatProps {
   tempId?: number;

@@ -1,8 +1,7 @@
 import React from "react";
 
-import { CommunicationPlatform } from "./CommunicationPlatform";
-import { AppConfigContextProvider } from "./contexts/AppConfig";
-import { MessageStatesContextProvider } from "./contexts/MessageStates";
+import { CommunicationPlatform } from "./containers";
+import { AppConfigContextProvider, MessageStatesContextProvider } from "./contexts";
 
 interface AppProps {
   serverUrl: string;

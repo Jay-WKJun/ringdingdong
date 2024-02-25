@@ -1,11 +1,11 @@
 import { css } from "@emotion/react";
 import React, { useEffect } from "react";
 
+import { Spinner } from "@/components";
+import { useAppConfig, useMessageStates, useSetMessageStates } from "@/contexts";
+import type { Message } from "@/types";
+
 import { Chat } from "./Chat";
-import { Spinner } from "./components/Spinner";
-import { useAppConfig } from "./contexts/AppConfig";
-import { useMessageStates, useSetMessageStates } from "./contexts/MessageStates";
-import type { Message } from "./types";
 
 export function ChatHistory() {
   const messageStates = useMessageStates();
