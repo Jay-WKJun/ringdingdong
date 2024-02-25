@@ -3,47 +3,42 @@ import React, { forwardRef } from "react";
 
 import { Button } from "@/components/Button";
 
-interface AnchorControlProps {}
+interface AnchorControllerProps {}
 
 export const AnchorControllerTemplate = forwardRef<
   HTMLTemplateElement,
-  AnchorControlProps
+  AnchorControllerProps
 >((_, ref) => (
   <template ref={ref}>
     <div
       css={css`
         position: absolute;
-        top: -100%;
-        left: 0;
+        top: 50%;
+        left: 50%;
         display: flex;
         background-color: white;
-        padding: 10px;
-        gap: 3px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        box-sizing: border-box;
         border-radius: 10px;
-        font-size: 10px;
+        font-size: 1em;
+        z-index: 1;
+        transform: translate(-50%, -50%);
       `}
     >
-      <input
-        type="text"
+      <Button
+        type="button"
         css={css`
-          width: fit-content;
-          padding: 10px;
-          border: 1px solid #ccc;
-          border-radius: 5px;
-          margin-right: 5px;
+          padding: 0.1em 0.2em;
+          font-size: 1em;
         `}
-      />
-      <Button type="button">📝</Button>
-      <Button type="button">⏍</Button>
+      >
+        ⏍
+      </Button>
     </div>
   </template>
 ));
 
-const clickAwayEventObserver = initClickAwayEvent();
-
-// TODO: 위로 뜨는게 아닌, 글 위에 작은 버튼 올리는 방식으로 변경
-export function appendAnchorControl({
+export function appendAnchorController({
   anchorElement,
   anchorControlTemplateElement,
 }: {
@@ -59,64 +54,15 @@ export function appendAnchorControl({
 
   // 최상위 node에 이벤트 추가
   cloneNode.addEventListener("click", (e) => e.stopPropagation());
-  cloneNode.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      e.stopPropagation();
-      anchorElement.setAttribute("href", hrefInput.value);
-      clickAwayEventObserver.delete(cloneNode);
-    }
-  });
-
-  // 수정버튼
-  const editButtonElement = cloneNode.childNodes[1] as HTMLButtonElement;
-  editButtonElement.addEventListener("click", () => {
-    anchorElement.setAttribute("href", hrefInput.value);
-    clickAwayEventObserver.delete(cloneNode);
-  });
 
   // 새창버튼
-  const newWindowButtonElement = cloneNode.childNodes[2] as HTMLButtonElement;
+  const newWindowButtonElement = cloneNode.childNodes[0] as HTMLButtonElement;
   newWindowButtonElement.addEventListener("click", () => {
     const href = hrefInput.value;
     window.open(href);
   });
 
-  clickAwayEventObserver.set(cloneNode);
   anchorElement.appendChild(cloneNode);
-}
 
-interface ClickAwayEventObserver {
-  set(newElement: HTMLElement): void;
-  delete(targetElement: HTMLElement): void;
-}
-
-function initClickAwayEvent(): ClickAwayEventObserver {
-  const tempElements = new Map<HTMLElement, boolean>();
-
-  window.addEventListener("click", (e) => {
-    if (!e.target) return;
-
-    if (tempElements.size > 0) {
-      Array.from(tempElements.entries()).forEach(([el, isFirst]) => {
-        if (isFirst) {
-          tempElements.set(el, false);
-          return;
-        }
-
-        if (e.target !== el) {
-          el.remove();
-        }
-      });
-    }
-  });
-
-  return {
-    set(newElement: HTMLElement) {
-      tempElements.set(newElement, true);
-    },
-    delete(targetElement: HTMLElement) {
-      tempElements.delete(targetElement);
-      targetElement.remove();
-    },
-  };
+  return cloneNode;
 }

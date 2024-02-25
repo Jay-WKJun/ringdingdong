@@ -2,15 +2,18 @@ import { css } from "@emotion/react";
 import React, { KeyboardEvent, useCallback, useRef, useState } from "react";
 
 import { Button } from "@/components/Button";
-import { bubbleAllTagName } from "@/utils/dom";
+import { getAllParentElements, selectAllChildrenText } from "@/utils/dom";
 
 import {
   AnchorControllerTemplate,
-  appendAnchorControl,
+  appendAnchorController,
 } from "./AnchorController";
 import { TEXT_STATES, TEXT_INDENTS, ANCHOR } from "./constants";
 import { TextController } from "./TextController";
 import { TextInput, SelectEventParameters } from "./TextInput";
+
+const textStatesSet = new Set(TEXT_STATES);
+const textIndentsSet = new Set(TEXT_INDENTS);
 
 interface TextEditorProps {
   bottomMode?: boolean;
@@ -22,8 +25,10 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
   const textInputRef = useRef<HTMLInputElement>(null);
   const anchorControlTemplateRef = useRef<HTMLTemplateElement>(null);
 
-  // TODO: 컨트롤러 보이기 안보이기 설정 (없앨 경우 글을 긁으면 컨트롤러 나오도록 하기)
-
+  const [selectedAnchor, setSelectedAnchor] = useState<{
+    anchor: HTMLElement;
+    anchorController: HTMLElement;
+  } | null>(null);
   const [textStates, setTextStates] = useState<typeof TEXT_STATES>([]);
   const [indentState, setIndentState] =
     useState<(typeof TEXT_INDENTS)[number]>("");
@@ -58,22 +63,27 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
 
   const handleNonCollapsedSelect = useCallback(
     ({ event, selection }: SelectEventParameters) => {
-      const textStateElements = getTextStateElements(
+      const selectedElementTagNames = getSelectedElementTagNames(
         selection,
         event.target as HTMLElement,
-        new Set(TEXT_STATES),
       );
-      setTextStates(textStateElements);
+      const textStates = selectedElementTagNames.filter((tagName) =>
+        textStatesSet.has(tagName),
+      );
+      setTextStates(textStates);
     },
     [],
   );
 
   const handleTextInputSelect = useCallback(
     ({ event, selection }: SelectEventParameters) => {
-      const textIndentElements = getTextStateElements(
+      const selectedElementTagNames = getSelectedElementTagNames(
         selection,
         event.target as HTMLElement,
-        new Set(TEXT_INDENTS),
+      );
+
+      const textIndentElements = selectedElementTagNames.filter((el) =>
+        textIndentsSet.has(el),
       );
       setIndentState(textIndentElements[0] || "");
     },
@@ -82,17 +92,35 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
 
   const handleTextInputClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      const clickTargetElement = e.target as HTMLElement | null;
-      if (clickTargetElement?.tagName === ANCHOR) {
+      const clickedElement = e.target as HTMLElement | null;
+
+      if (clickedElement?.tagName === ANCHOR) {
         if (!anchorControlTemplateRef.current) return;
-        const anchorElement = clickTargetElement as HTMLAnchorElement;
-        appendAnchorControl({
+        if (selectedAnchor?.anchor === clickedElement) {
+          selectedAnchor.anchorController.remove();
+          return;
+        }
+
+        const anchorElement = clickedElement as HTMLAnchorElement;
+        selectAllChildrenText(anchorElement);
+
+        const anchorControllerElement = appendAnchorController({
           anchorElement,
           anchorControlTemplateElement: anchorControlTemplateRef.current,
         });
+        setSelectedAnchor({
+          anchor: anchorElement,
+          anchorController: anchorControllerElement,
+        });
+      } else if (
+        selectedAnchor &&
+        clickedElement !== selectedAnchor.anchorController
+      ) {
+        selectedAnchor.anchorController.remove();
+        setSelectedAnchor(null);
       }
     },
-    [],
+    [selectedAnchor],
   );
 
   return (
@@ -159,20 +187,19 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
   );
 }
 
-function getTextStateElements(
+function getSelectedElementTagNames(
   select: Selection,
   rootElement: HTMLElement,
-  selectedTagNames?: Set<string>,
 ) {
   const anchorNode = select.anchorNode as HTMLElement;
   const focusNode = select.focusNode as HTMLElement;
 
-  const anchorTagNames = bubbleAllTagName(anchorNode, { rootElement });
-  const endTagNames = bubbleAllTagName(focusNode, { rootElement });
+  const anchorTagNames = getAllParentElements(anchorNode, { rootElement });
+  const endTagNames = getAllParentElements(focusNode, { rootElement });
 
-  const textElements: string[] = Array.from(
+  const selectedElements = Array.from(
     new Set([...anchorTagNames, ...endTagNames]),
-  ).filter((state) => selectedTagNames?.has(state));
+  );
 
-  return textElements;
+  return selectedElements.map((el) => el.tagName);
 }
