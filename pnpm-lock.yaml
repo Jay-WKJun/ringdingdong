@@ -29,6 +29,9 @@ importers:
       '@emotion/react':
         specifier: ^11.11.3
         version: 11.11.3(@types/react@18.2.46)(react@18.2.0)
+      event-source-polyfill:
+        specifier: ^1.0.31
+        version: 1.0.31
       html-to-react:
         specifier: ^1.7.0
         version: 1.7.0(react@18.2.0)
@@ -48,6 +51,9 @@ importers:
       '@ringdingdong/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
+      '@types/event-source-polyfill':
+        specifier: ^1.0.5
+        version: 1.0.5
       '@types/react':
         specifier: ^18.2.43
         version: 18.2.46
@@ -3783,7 +3789,6 @@ packages:
 
   /event-source-polyfill@1.0.31:
     resolution: {integrity: sha512-4IJSItgS/41IxN5UVAVuAyczwZF7ZIEsM1XAoUzIHA6A+xzusEZUutdXz2Nr+MQPLxfTiCvqE79/C8HT8fKFvA==}
-    dev: true
 
   /eventemitter3@3.1.2:
     resolution: {integrity: sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==}
@@ -7242,7 +7247,7 @@ packages:
       debug: 4.3.4
       globrex: 0.1.2
       tsconfck: 3.0.2(typescript@5.3.3)
-      vite: 5.0.12(@types/node@20.10.6)
+      vite: 5.0.12(@types/node@20.11.17)
     transitivePeerDependencies:
       - supports-color
       - typescript
