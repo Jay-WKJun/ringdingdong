@@ -14,7 +14,7 @@ function initSSEListener() {
       eventSource = null;
     }
 
-    eventSource = new EventSource(serverUrl, {
+    eventSource = new EventSource(`${serverUrl}/subscribe`, {
       withCredentials: true,
       headers: {
         Authorization: token,

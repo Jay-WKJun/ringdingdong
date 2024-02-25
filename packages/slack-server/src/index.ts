@@ -4,10 +4,20 @@ import fs from "fs";
 import spdy from "spdy";
 
 import { ROOT_PATH, CLIENT_URL, KEY_NAME, CERT_NAME } from "./utils/env";
-import { postAuthToken, postMessage, postRefreshToken, postUser, getHealthCheck, getSubscribe } from "./views";
+import {
+  postAuthToken,
+  postMessage,
+  postRefreshToken,
+  postUser,
+  getHealthCheck,
+  getSubscribe,
+} from "./views";
 
 const app = express();
 const port = 3000;
+
+// TODO: 메세지 수정 api
+// TODO: 전체 메세지 받아오는 api
 
 app.use(express.json());
 

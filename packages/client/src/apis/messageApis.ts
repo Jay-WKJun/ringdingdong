@@ -14,12 +14,12 @@ export async function postMessage({
   message,
 }: PostMessageParams) {
   try {
-    return fetch(`${serverUrl}/1/message`, {
+    return fetch(`${serverUrl}/message`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ tempId, text: message }),
+      body: JSON.stringify({ tempId, message }),
     }).then((res) => res.json());
   } catch (e) {
     // @ts-expect-error: error handling
@@ -33,7 +33,7 @@ interface GetMessagesParams {
 
 export async function getMessages({ serverUrl }: GetMessagesParams) {
   try {
-    return fetch(`${serverUrl}/1/messages`).then((res) => res.json());
+    return fetch(`${serverUrl}/messages`).then((res) => res.json());
   } catch (e) {
     // @ts-expect-error: error handling
     throw new Error(e);
