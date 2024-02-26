@@ -2,7 +2,7 @@ import React from "react";
 
 import { CommunicationPlatform } from "./containers";
 import {
-  AppConfigContextProvider,
+  AppGlobalContextProvider,
   MessageStatesContextProvider,
 } from "./contexts";
 
@@ -12,11 +12,11 @@ interface AppProps {
 
 function App({ serverUrl }: AppProps) {
   return (
-    <AppConfigContextProvider serverUrl={serverUrl}>
+    <AppGlobalContextProvider serverUrl={serverUrl}>
       <MessageStatesContextProvider>
         <CommunicationPlatform />
       </MessageStatesContextProvider>
-    </AppConfigContextProvider>
+    </AppGlobalContextProvider>
   );
 }
 

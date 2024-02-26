@@ -1,8 +1,7 @@
 import { css } from "@emotion/react";
 import React, { useCallback, useState } from "react";
 
-import { postMessage } from "@/apis/messageApis";
-import { useAppConfig, useSetMessageStates } from "@/contexts";
+import { useAppGlobal, useSetMessageStates } from "@/contexts";
 import type { Message, MessageSendState } from "@/types";
 
 import { Avatar } from "./Avatar";
@@ -21,7 +20,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
   const [isHover, setIsHover] = useState(false);
 
   const setMessageStates = useSetMessageStates();
-  const appConfig = useAppConfig();
+  const { apis } = useAppGlobal();
 
   const handleResendButtonClick = useCallback(async () => {
     if (!tempId || sendState !== "failed") return;
@@ -37,8 +36,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
     });
 
     try {
-      const res = await postMessage({
-        serverUrl: appConfig.serverUrl,
+      const res = await apis.postMessage({
         tempId,
         message: message.message,
       });
@@ -63,7 +61,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
         });
       });
     }
-  }, [appConfig.serverUrl, message, sendState, setMessageStates, tempId]);
+  }, [apis, message, sendState, setMessageStates, tempId]);
 
   const handleDeleteButtonClick = useCallback(() => {
     setMessageStates((prev) => {

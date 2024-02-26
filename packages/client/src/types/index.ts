@@ -1,4 +1,7 @@
-export interface AppConfig {
+import type { apis } from "@/apis";
+
+export interface AppGlobal {
+  apis: typeof apis;
   serverUrl: string;
 }
 

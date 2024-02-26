@@ -1,10 +1,9 @@
 import { css } from "@emotion/react";
 import React, { useEffect } from "react";
 
-import { getMessages } from "@/apis/messageApis";
 import { Spinner } from "@/components";
 import {
-  useAppConfig,
+  useAppGlobal,
   useMessageStates,
   useSetMessageStates,
 } from "@/contexts";
@@ -15,15 +14,17 @@ import { Chat } from "./Chat";
 export function ChatHistory() {
   const messageStates = useMessageStates();
   const setMessageStates = useSetMessageStates();
-  const appConfig = useAppConfig();
+  const { apis } = useAppGlobal();
 
   useEffect(() => {
     setTimeout(() => {
-      getMessages({ serverUrl: appConfig.serverUrl }).then((res) =>
-        setMessageStates(res?.map((message: Message) => ({ message }) || [])),
-      );
+      apis
+        .getMessages()
+        .then((res) =>
+          setMessageStates(res?.map((message: Message) => ({ message }) || [])),
+        );
     }, 1000);
-  }, [appConfig.serverUrl, setMessageStates]);
+  }, [apis, setMessageStates]);
 
   // TODO: Virtual Scroll
   return (

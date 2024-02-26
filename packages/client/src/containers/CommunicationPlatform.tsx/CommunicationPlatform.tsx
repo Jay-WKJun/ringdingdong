@@ -1,9 +1,8 @@
 import { css } from "@emotion/react";
 import React, { useCallback } from "react";
 
-import { postMessage } from "@/apis/messageApis";
 import { TextEditor } from "@/components";
-import { useAppConfig, useSetMessageStates } from "@/contexts";
+import { useAppGlobal, useSetMessageStates } from "@/contexts";
 import { Header } from "@/Header";
 
 import { ChatHistory } from "./ChatHistory";
@@ -32,7 +31,7 @@ const chatContainerStyle = css`
 
 export function CommunicationPlatform() {
   const setMessageState = useSetMessageStates();
-  const appConfig = useAppConfig();
+  const { apis } = useAppGlobal();
 
   const handleInputTextSubmit = useCallback(
     (text: string) => {
@@ -67,7 +66,8 @@ export function CommunicationPlatform() {
         ];
       });
 
-      postMessage({ serverUrl: appConfig.serverUrl, message: text, tempId })
+      apis
+        .postMessage({ message: text, tempId })
         .then((res) =>
           setMessageState(
             (prev) =>
@@ -98,7 +98,7 @@ export function CommunicationPlatform() {
           );
         });
     },
-    [appConfig.serverUrl, setMessageState],
+    [setMessageState, apis],
   );
 
   return (
