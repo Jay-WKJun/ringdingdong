@@ -23,7 +23,6 @@ app.use(express.json());
 initSlackController();
 
 app.get("/", (req, res) => {
-  console.log("home req come");
   res.send("Success");
 });
 
