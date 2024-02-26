@@ -25,7 +25,27 @@ export const getMessages: RequestHandler = async (req, res) => {
 
     const messages = await getSlackThreadHistories(decodedToken.id);
     if (messages) {
-      res.send(messages);
+      const userId = decodedToken.id;
+      res.send(
+        messages.map((message) => {
+          if (message.bot_id) {
+            return {
+              id: message.client_msg_id ?? message.ts,
+              userId,
+              message: message.text,
+              createdAt: message.ts,
+              type: message.type,
+            };
+          }
+
+          return {
+            id: message.client_msg_id!,
+            message: message.text,
+            createdAt: message.ts,
+            type: message.type,
+          };
+        }),
+      );
     } else {
       res.send([]);
     }
