@@ -7,6 +7,7 @@ import {
   useMessageStates,
   useSetMessageStates,
 } from "@/contexts";
+import { useScrollSet } from "@/hooks/useScrollSet";
 import type { Message } from "@/types";
 
 import { Chat } from "./Chat";
@@ -15,6 +16,8 @@ export function ChatHistory() {
   const messageStates = useMessageStates();
   const setMessageStates = useSetMessageStates();
   const { apis, serverUrl } = useAppGlobal();
+
+  const { targetRef, setScrollToBottom } = useScrollSet<HTMLDivElement>();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -37,7 +40,13 @@ export function ChatHistory() {
         }
       });
     });
-  }, [apis, serverUrl, setMessageStates]);
+  }, [apis, serverUrl, setMessageStates, setScrollToBottom]);
+
+  useEffect(() => {
+    if (messageStates) {
+      setScrollToBottom();
+    }
+  }, [messageStates, setScrollToBottom]);
 
   // TODO: Virtual Scroll
   return (
@@ -51,7 +60,9 @@ export function ChatHistory() {
         height: calc(100% - 120px);
         overflow-y: auto;
         box-sizing: border-box;
+        scroll-behavior: smooth;
       `}
+      ref={targetRef}
     >
       {messageStates ? (
         messageStates.map(({ message, tempId, sendState }) => (
