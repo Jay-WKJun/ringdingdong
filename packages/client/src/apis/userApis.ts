@@ -1,6 +1,6 @@
-export async function getAuthToken(serverUrl: string, token: string) {
+export async function getAuthToken(this: { serverUrl: string }, token: string) {
   try {
-    return fetch(`${serverUrl}/auth_token`, {
+    return fetch(`${this.serverUrl}/auth_token`, {
       method: "GET",
       headers: {
         Authorization: token,
@@ -12,19 +12,17 @@ export async function getAuthToken(serverUrl: string, token: string) {
   }
 }
 
-interface PostRefreshTokenProps {
-  serverUrl: string;
+export interface PostRefreshTokenProps {
   id: string;
   password: string;
 }
 
-export async function getRefreshToken({
-  serverUrl,
-  id,
-  password,
-}: PostRefreshTokenProps) {
+export async function getRefreshToken(
+  this: { serverUrl: string },
+  { id, password }: PostRefreshTokenProps,
+) {
   try {
-    return fetch(`${serverUrl}/refresh_token`, {
+    return fetch(`${this.serverUrl}/refresh_token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,21 +35,18 @@ export async function getRefreshToken({
   }
 }
 
-interface PostUserProps {
-  serverUrl: string;
+export interface PostUserProps {
   id: string;
   password: string;
   description: string;
 }
 
-export async function postUser({
-  serverUrl,
-  id,
-  password,
-  description,
-}: PostUserProps) {
+export async function postUser(
+  this: { serverUrl: string },
+  { id, password, description }: PostUserProps,
+) {
   try {
-    return fetch(`${serverUrl}/new`, {
+    return fetch(`${this.serverUrl}/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
