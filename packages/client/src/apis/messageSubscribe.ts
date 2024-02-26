@@ -4,6 +4,8 @@ const EventSource = EventSourcePolyfill;
 
 function initSSEListener() {
   let eventSource: EventSource | null = null;
+  let retryCount = 0;
+  const RETRY_LIMIT = 3;
   const messageListeners: Set<(e: MessageEvent<unknown>) => void> = new Set();
   const openListeners: Set<(e: Event) => void> = new Set();
   const errorListeners: Set<(e: Event) => void> = new Set();
@@ -23,6 +25,7 @@ function initSSEListener() {
 
     eventSource.addEventListener("open", (e) => {
       console.log("open sse connection");
+      retryCount = 0;
       openListeners.forEach((listener) => {
         listener(e);
       });
@@ -36,8 +39,11 @@ function initSSEListener() {
     });
 
     eventSource.addEventListener("error", (e) => {
-      console.log("sse error");
-      eventSource?.close();
+      if (retryCount > RETRY_LIMIT) {
+        console.error("connect retry limit exceeded");
+        eventSource?.close();
+      }
+      retryCount += 1;
       errorListeners.forEach((listener) => {
         listener(e);
       });
