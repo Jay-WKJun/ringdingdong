@@ -8,5 +8,6 @@ export const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN as string;
 export const SLACK_CHANNEL_ID = process.env.SLACK_CHANNEL_ID as string;
 export const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
 export const SLACK_APP_TOKEN = process.env.SLACK_APP_TOKEN;
+export const SLACK_BOT_ID = process.env.SLACK_BOT_ID;
 
 export const HTTP = process.env.HTTP;

@@ -4,6 +4,32 @@ import { ROOT_PATH } from "@/utils/env";
 
 const db = new JsonDB(new Config(`${ROOT_PATH}/db/db.json`, true, true));
 
+const BOT_ID_PATH = "/botId";
+
+const USER_PATH = "/users";
+
+function getUserPath(id: string) {
+  return `${USER_PATH}/${id}`;
+}
+
+export async function getBotId() {
+  try {
+    const botId = (await db.getData(BOT_ID_PATH)) as string;
+    if (!botId) return null;
+    return botId;
+  } catch {
+    return null;
+  }
+}
+
+export async function setBotId(botId: string) {
+  try {
+    await db.push(BOT_ID_PATH, botId);
+  } catch {
+    throw new Error("Failed to set bot id");
+  }
+}
+
 export type UserInfo = {
   id: string;
   password: string;
@@ -13,7 +39,7 @@ export type UserInfo = {
 export async function getUserInfo(id: string) {
   let userInfo: string;
   try {
-    userInfo = (await db.getData(`/users/${id}`)) as string;
+    userInfo = (await db.getData(getUserPath(id))) as string;
     if (!userInfo) {
       return null;
     }
@@ -30,5 +56,5 @@ export async function getUserInfo(id: string) {
 }
 
 export async function setUserInfo(id: string, userInfo: UserInfo) {
-  return db.push(`/users/${id}`, JSON.stringify(userInfo));
+  return db.push(getUserPath(id), JSON.stringify(userInfo));
 }

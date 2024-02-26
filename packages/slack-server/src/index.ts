@@ -3,6 +3,7 @@ import express from "express";
 import fs from "fs";
 import spdy from "spdy";
 
+import { initSlackController } from "./controllers/slackController";
 import { ROOT_PATH, CLIENT_URL, KEY_NAME, CERT_NAME, HTTP } from "./utils/env";
 import {
   postAuthToken,
@@ -19,6 +20,8 @@ const port = 3000;
 
 app.use(express.json());
 
+initSlackController();
+
 app.get("/", (req, res) => {
   console.log("home req come");
   res.send("Success");
@@ -27,6 +30,13 @@ app.get("/", (req, res) => {
 app.get("/health_check", getHealthCheck);
 
 app.get("/subscribe", getSubscribe);
+
+app.options("/messages", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.send();
+});
 
 app.get("/messages", getMessages);
 

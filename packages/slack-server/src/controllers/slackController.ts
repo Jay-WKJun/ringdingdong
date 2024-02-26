@@ -1,11 +1,25 @@
-import { getUserInfo, setUserInfo } from "@/services/db";
+import { getBotId, getUserInfo, setBotId, setUserInfo } from "@/services/db";
 import {
   createNewSlackThread,
+  getBotsInfo,
   getSlackThreadMessages,
   sendSlackMessage,
 } from "@/services/slack";
 
 import { createToken, verifyToken } from "./tokenController";
+
+export async function initSlackController() {
+  const botId = await getBotId();
+  if (botId) return;
+
+  try {
+    const botInfo = await getBotsInfo();
+    await setBotId(botInfo.bot?.id as string);
+  } catch (e) {
+    // @ts-expect-error: error handling
+    throw new Error(e);
+  }
+}
 
 export function checkAndDecodeTokenController(token: string) {
   const jwtToken = token.replace(/^"(.*)"$/, "").replace(/^Bearer[\s]*/, "");

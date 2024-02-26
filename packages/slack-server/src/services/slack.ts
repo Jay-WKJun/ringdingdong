@@ -1,11 +1,22 @@
 import { WebClient } from "@slack/web-api";
 
-import { SLACK_BOT_TOKEN, SLACK_CHANNEL_ID } from "@/utils/env";
+import { SLACK_BOT_ID, SLACK_BOT_TOKEN, SLACK_CHANNEL_ID } from "@/utils/env";
 
 const client = new WebClient(SLACK_BOT_TOKEN, {
   // LogLevel can be imported and used to make debugging simpler
   // logLevel: LogLevel.DEBUG,
 });
+
+export async function getBotsInfo() {
+  try {
+    return client.bots.info({
+      token: SLACK_BOT_TOKEN,
+      bot: SLACK_BOT_ID,
+    });
+  } catch {
+    throw new Error("Slack Bot Info Error");
+  }
+}
 
 interface CreateNewSlackThreadParam {
   id: string;
@@ -76,7 +87,7 @@ export async function getSlackThreadMessages(threadId: string) {
       channel: SLACK_CHANNEL_ID,
       ts: threadId,
     });
-
+    console.log("result", result);
     const conversationHistory = result.messages;
 
     return conversationHistory;
