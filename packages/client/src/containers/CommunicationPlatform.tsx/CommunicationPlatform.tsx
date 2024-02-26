@@ -50,11 +50,11 @@ export function CommunicationPlatform() {
 
         if (!prev) return [newMessage];
         return [
+          ...prev,
           {
             ...newMessage,
             sendState: "sending",
           },
-          ...prev,
         ];
       });
 

@@ -14,18 +14,30 @@ import { Chat } from "./Chat";
 export function ChatHistory() {
   const messageStates = useMessageStates();
   const setMessageStates = useSetMessageStates();
-  const { apis } = useAppGlobal();
+  const { apis, serverUrl } = useAppGlobal();
 
   useEffect(() => {
-    setTimeout(async () => {
-      const token = await localStorage.getItem("token");
-      if (!token) return;
+    const token = localStorage.getItem("token");
+    if (!token) return;
 
-      apis.getMessages(token).then((res) => {
-        setMessageStates(res?.map((message: Message) => ({ message }) || []));
+    apis.getMessages(token).then((res) => {
+      setMessageStates(res?.map((message: Message) => ({ message }) || []));
+
+      apis.sseListener.start(serverUrl, token);
+      apis.sseListener.addMessageListener((e) => {
+        const data = e.data as string;
+        try {
+          const message = JSON.parse(data);
+          setMessageStates((prev) => {
+            if (!prev) return [{ message }];
+            return [...prev, { message }];
+          });
+        } catch {
+          console.error("error");
+        }
       });
-    }, 1000);
-  }, [apis, setMessageStates]);
+    });
+  }, [apis, serverUrl, setMessageStates]);
 
   // TODO: Virtual Scroll
   return (

@@ -28,6 +28,14 @@ app.get("/", (req, res) => {
 
 app.get("/health_check", getHealthCheck);
 
+app.options("/subscribe", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Headers", "Authorization");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.status(204).send();
+});
+
 app.get("/subscribe", getSubscribe);
 
 app.options("/messages", (req, res) => {

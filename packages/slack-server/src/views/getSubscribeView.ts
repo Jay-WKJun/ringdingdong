@@ -8,6 +8,7 @@ import {
   addMessageListener,
   removeMessageListener,
 } from "@/controllers/slackListener";
+import { getUserInfo } from "@/services/db";
 import { CLIENT_URL } from "@/utils/env";
 
 export const getSubscribe: RequestHandler = async (req, res) => {
@@ -17,27 +18,43 @@ export const getSubscribe: RequestHandler = async (req, res) => {
     return;
   }
 
+  const decodedToken = checkAndDecodeTokenController(jwtToken);
   try {
-    const decodedToken = checkAndDecodeTokenController(jwtToken);
-
     if (!(await isUserExist(decodedToken))) {
       res.status(401).send("Unauthorized");
+      return;
     }
   } catch {
     res.status(401).send("Token expired or invalid");
+    return;
   }
+  const userInfo = (await getUserInfo(decodedToken.id))!;
+  const threadId = userInfo.threadId;
 
   res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
   res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Headers", "Authorization");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
   res.flushHeaders();
 
-  addMessageListener(1708600002.841869, ({ id, htmlText }) => {
-    res.write(`id: ${id}\n`);
-    res.write(`data: ${htmlText}\n\n`);
-  });
+  addMessageListener(
+    threadId,
+    ({ id, htmlText, avatarUrl, createdAt, type }) => {
+      res.write(`id: ${id}\n`);
+      res.write(
+        `data: ${JSON.stringify({
+          id,
+          message: htmlText,
+          createdAt,
+          type,
+          avatarUrl,
+        })}\n\n`,
+      );
+    },
+  );
 
   // If client closes connection, stop sending events
   res.on("close", () => {

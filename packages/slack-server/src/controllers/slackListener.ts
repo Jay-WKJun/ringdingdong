@@ -19,6 +19,8 @@ interface MessageListenerParam {
   id: string;
   htmlText: string;
   avatarUrl?: string;
+  createdAt: string;
+  type: string;
 }
 
 type MessageListener = (messageParam: MessageListenerParam) => void;
@@ -42,8 +44,13 @@ const messageListener: { [threadId: string]: MessageListener } = {};
 
     const htmlText = slackMarkdown.toHTML(message.text as string);
     const callback = messageListener[threadId];
-    console.log("htmlText", htmlText);
-    callback?.({ id: message.ts, htmlText, avatarUrl: MY_AVATAR_URL });
+    callback?.({
+      id: message.client_msg_id,
+      htmlText,
+      avatarUrl: MY_AVATAR_URL,
+      createdAt: message.ts,
+      type: message.type,
+    });
   });
 
   bolt.command("/test", async ({ say }) => {
@@ -53,7 +60,7 @@ const messageListener: { [threadId: string]: MessageListener } = {};
 })();
 
 export const addMessageListener = (
-  threadId: number,
+  threadId: string,
   callback: MessageListener,
 ) => {
   messageListener[threadId] = callback;

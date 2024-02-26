@@ -29,6 +29,7 @@ function initSSEListener() {
     });
 
     eventSource.addEventListener("message", (e) => {
+      console.log("message", e);
       messageListeners.forEach((listener) => {
         listener(e);
       });
