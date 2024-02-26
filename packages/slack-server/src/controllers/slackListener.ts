@@ -5,6 +5,7 @@ import {
   SLACK_SIGNING_SECRET,
   SLACK_BOT_TOKEN,
   SLACK_APP_TOKEN,
+  MY_AVATAR_URL,
 } from "@/utils/env";
 
 const bolt = new App({
@@ -17,7 +18,7 @@ const bolt = new App({
 interface MessageListenerParam {
   id: string;
   htmlText: string;
-  threadId: string;
+  avatarUrl?: string;
 }
 
 type MessageListener = (messageParam: MessageListenerParam) => void;
@@ -29,7 +30,6 @@ const messageListener: { [threadId: string]: MessageListener } = {};
   console.log("⚡️ Bolt app started");
 
   bolt.message(async ({ message }) => {
-    console.log("message : ", message);
     const threadId = message.thread_ts as string;
     const type = message.type;
 
@@ -42,10 +42,10 @@ const messageListener: { [threadId: string]: MessageListener } = {};
 
     const htmlText = slackMarkdown.toHTML(message.text as string);
     const callback = messageListener[threadId];
-    callback?.({ id: message.ts, htmlText, threadId });
-
     console.log("htmlText", htmlText);
+    callback?.({ id: message.ts, htmlText, avatarUrl: MY_AVATAR_URL });
   });
+
   bolt.command("/test", async ({ say }) => {
     console.log("command");
     say("test!!!");

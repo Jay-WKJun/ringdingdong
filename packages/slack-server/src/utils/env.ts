@@ -11,3 +11,5 @@ export const SLACK_APP_TOKEN = process.env.SLACK_APP_TOKEN;
 export const SLACK_BOT_ID = process.env.SLACK_BOT_ID;
 
 export const HTTP = process.env.HTTP;
+
+export const MY_AVATAR_URL = process.env.MY_AVATAR_URL;

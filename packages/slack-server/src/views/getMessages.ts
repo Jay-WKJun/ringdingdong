@@ -5,7 +5,7 @@ import {
   getSlackThreadHistories,
   isUserExist,
 } from "@/controllers/slackController";
-import { CLIENT_URL } from "@/utils/env";
+import { CLIENT_URL, MY_AVATAR_URL } from "@/utils/env";
 
 export const getMessages: RequestHandler = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
@@ -43,6 +43,7 @@ export const getMessages: RequestHandler = async (req, res) => {
             message: message.text,
             createdAt: message.ts,
             type: message.type,
+            avatarUrl: MY_AVATAR_URL,
           };
         }),
       );
