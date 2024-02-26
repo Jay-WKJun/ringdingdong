@@ -17,12 +17,13 @@ export function ChatHistory() {
   const { apis } = useAppGlobal();
 
   useEffect(() => {
-    setTimeout(() => {
-      apis
-        .getMessages()
-        .then((res) =>
-          setMessageStates(res?.map((message: Message) => ({ message }) || [])),
-        );
+    setTimeout(async () => {
+      const token = await localStorage.getItem("token");
+      if (!token) return;
+
+      apis.getMessages(token).then((res) => {
+        setMessageStates(res?.map((message: Message) => ({ message }) || []));
+      });
     }, 1000);
   }, [apis, setMessageStates]);
 

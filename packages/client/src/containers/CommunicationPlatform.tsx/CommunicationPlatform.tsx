@@ -37,37 +37,32 @@ export function CommunicationPlatform() {
     (text: string) => {
       const tempId = String(Math.floor(Math.random() * 100000000));
       setMessageState((prev) => {
-        if (!prev)
-          return [
-            {
-              message: {
-                id: "11",
-                message: text,
-                type: "message",
-                createdAt: new Date().toISOString(),
-                userId: "1",
-              },
-              tempId,
-            },
-          ];
+        const newMessage = {
+          message: {
+            id: "11",
+            message: text,
+            type: "message",
+            createdAt: new Date().toISOString(),
+            userId: "1",
+          },
+          tempId,
+        };
+
+        if (!prev) return [newMessage];
         return [
           {
-            message: {
-              id: "11",
-              message: text,
-              type: "message",
-              createdAt: new Date().toISOString(),
-              userId: "1",
-            },
-            tempId,
+            ...newMessage,
             sendState: "sending",
           },
           ...prev,
         ];
       });
 
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
       apis
-        .postMessage({ message: text, tempId })
+        .postMessage({ message: text, tempId, token })
         .then((res) =>
           setMessageState(
             (prev) =>

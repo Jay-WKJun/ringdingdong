@@ -2,9 +2,7 @@ import { css } from "@emotion/react";
 import React, { KeyboardEvent, useCallback, useRef, useState } from "react";
 
 import { Button } from "@/components/Button";
-import { useAppGlobal } from "@/contexts";
 import { getAllParentElements, selectAllChildrenText } from "@/utils/dom";
-import { createRandomId } from "@/utils/utils";
 
 import {
   AnchorControllerTemplate,
@@ -35,18 +33,12 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
   const [indentState, setIndentState] =
     useState<(typeof TEXT_INDENTS)[number]>("");
 
-  const { apis } = useAppGlobal();
-
   const sendMessage = useCallback(() => {
     if (!textInputRef.current) return;
     const message = textInputRef.current.innerHTML;
     onSubmit?.(message);
-    console.log("message", message);
     textInputRef.current.innerHTML = "";
-
-    const tempId = createRandomId();
-    apis.postMessage({ message, tempId });
-  }, [apis, onSubmit]);
+  }, [onSubmit]);
 
   const handleCollapsedSelect = useCallback(
     ({ selection }: SelectEventParameters) => {
