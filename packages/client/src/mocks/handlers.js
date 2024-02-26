@@ -12,8 +12,7 @@ const mockMessages = Array.from({ length: 10 }, (_, i) => ({
 
 let id = 11;
 
-// TODO: 사용자 추가 API
-// TODO: 헬스체크 API
+// TODO: 사용자 및 토큰 다루는 API
 export const handlers = [
   http.get("/health", () => new HttpResponse(null, { status: 204 })),
   http.get("/messages", () => HttpResponse.json(mockMessages)),
