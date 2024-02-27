@@ -101,6 +101,9 @@ export function Main() {
 
       <Modal
         modalCss={css`
+          display: flex;
+          justify-content: center;
+          align-items: center;
           width: 100%;
           height: 100%;
         `}
@@ -108,11 +111,26 @@ export function Main() {
         <div
           css={css`
             width: 100%;
+            max-width: 400px;
             height: 100%;
+            max-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            border-radius: 30px;
           `}
         >
-          <h1>Modal</h1>
-          <button type="button" onClick={closeModal}>
+          <h3>User not exist</h3>
+          <button
+            type="button"
+            css={css`
+              padding: 10px 20px;
+              border-radius: 30px;
+            `}
+            onClick={closeModal}
+          >
             Close
           </button>
         </div>
