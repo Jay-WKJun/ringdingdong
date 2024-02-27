@@ -1,3 +1,4 @@
+import { MessageElement } from "@slack/web-api/dist/types/response/ConversationsHistoryResponse";
 import { RequestHandler } from "express";
 
 import {
@@ -5,6 +6,7 @@ import {
   getSlackThreadHistories,
   isUserExist,
 } from "@/controllers/slackController";
+import type { Message } from "@/type";
 import { CLIENT_URL, MY_AVATAR_URL } from "@/utils/env";
 
 export const getMessages: RequestHandler = async (req, res) => {
@@ -16,7 +18,13 @@ export const getMessages: RequestHandler = async (req, res) => {
     return;
   }
 
-  const decodedToken = checkAndDecodeTokenController(jwtToken);
+  let decodedToken;
+  try {
+    decodedToken = checkAndDecodeTokenController(jwtToken);
+  } catch {
+    res.status(401).send("Token expired or invalid");
+    return;
+  }
 
   try {
     if (!(await isUserExist(decodedToken))) {
@@ -26,27 +34,30 @@ export const getMessages: RequestHandler = async (req, res) => {
     const messages = await getSlackThreadHistories(decodedToken.id);
     if (messages) {
       const userId = decodedToken.id;
-      res.send(
-        messages.map((message) => {
-          if (message.bot_id) {
-            return {
-              id: message.client_msg_id ?? message.ts,
-              userId,
-              message: message.text,
-              createdAt: message.ts,
-              type: message.type,
-            };
-          }
-
+      const responseMessages: Message[] = messages.map((message) => {
+        if (message.bot_id) {
           return {
-            id: message.client_msg_id!,
+            id: message.ts ?? String(Date.now()),
+            userId,
             message: message.text,
             createdAt: message.ts,
             type: message.type,
-            avatarUrl: MY_AVATAR_URL,
           };
-        }),
-      );
+        }
+
+        const myMessage = message as MessageElement & {
+          client_msg_id?: string;
+        };
+        return {
+          id: myMessage.client_msg_id,
+          message: myMessage.text,
+          createdAt: myMessage.ts,
+          type: myMessage.type,
+          avatarUrl: MY_AVATAR_URL,
+        };
+      });
+
+      res.send(responseMessages);
     } else {
       res.send([]);
     }

@@ -12,7 +12,13 @@ export const postAuthToken: RequestHandler = async (req, res) => {
     return;
   }
 
-  const decodedToken = checkAndDecodeTokenController(jwtToken);
+  let decodedToken;
+  try {
+    decodedToken = checkAndDecodeTokenController(jwtToken);
+  } catch {
+    res.status(401).send("Token expired or invalid");
+    return;
+  }
 
   if (!(await isUserExist(decodedToken))) {
     res.status(401).send("Unauthorized");

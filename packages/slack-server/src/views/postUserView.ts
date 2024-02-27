@@ -11,12 +11,13 @@ export const postUser: RequestHandler = async (req, res) => {
   const id = req.body.id;
   const password = req.body.password;
   const description = req.body.description;
+
   if (!password || !id || !description) {
     res.status(400).send("Bad Request");
     return;
   }
 
-  if (!(await isUserExist({ id, password }))) {
+  if (await isUserExist({ id, password })) {
     res.status(403).send("User Exist");
     return;
   }

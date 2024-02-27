@@ -18,8 +18,9 @@ export const getSubscribe: RequestHandler = async (req, res) => {
     return;
   }
 
-  const decodedToken = checkAndDecodeTokenController(jwtToken);
+  let decodedToken;
   try {
+    decodedToken = checkAndDecodeTokenController(jwtToken);
     if (!(await isUserExist(decodedToken))) {
       res.status(401).send("Unauthorized");
       return;
