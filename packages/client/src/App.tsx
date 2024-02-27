@@ -1,21 +1,20 @@
 import React from "react";
 
-import { CommunicationPlatform } from "./containers";
 import {
   AppGlobalContextProvider,
-  MessageStatesContextProvider,
+  AppGlobalContextProviderProps,
+  PathContextProvider,
 } from "./contexts";
+import { Router } from "./Router";
 
-interface AppProps {
-  serverUrl: string;
-}
+interface AppProps extends AppGlobalContextProviderProps {}
 
-function App({ serverUrl }: AppProps) {
+function App(props: AppProps) {
   return (
-    <AppGlobalContextProvider serverUrl={serverUrl}>
-      <MessageStatesContextProvider>
-        <CommunicationPlatform />
-      </MessageStatesContextProvider>
+    <AppGlobalContextProvider {...props}>
+      <PathContextProvider>
+        <Router />
+      </PathContextProvider>
     </AppGlobalContextProvider>
   );
 }

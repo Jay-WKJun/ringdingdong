@@ -1,9 +1,8 @@
 import { css } from "@emotion/react";
 import React, { useCallback } from "react";
 
-import { TextEditor } from "@/components";
+import { TextEditor, Header } from "@/components";
 import { useAppGlobal, useSetMessageStates } from "@/contexts";
-import { Header } from "@/Header";
 
 import { ChatHistory } from "./ChatHistory";
 

@@ -1,8 +1,10 @@
 import type { apis } from "@/apis";
+import { LocalStorageService } from "@/models/LocalStorageService";
 
 export interface AppGlobal {
   apis: typeof apis;
   serverUrl: string;
+  localStorageService: LocalStorageService | null;
 }
 
 export interface Message {
