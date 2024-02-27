@@ -1,11 +1,19 @@
 import { css } from "@emotion/react";
 import React, { useCallback } from "react";
 
+import { useModal } from "@/hooks";
+
 export function Main() {
-  const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("submit");
-  }, []);
+  const { openModal, closeModal, Modal } = useModal();
+
+  const handleSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      console.log("submit");
+      openModal();
+    },
+    [openModal],
+  );
 
   return (
     <main
@@ -90,6 +98,25 @@ export function Main() {
           </button>
         </div>
       </form>
+
+      <Modal
+        modalCss={css`
+          width: 100%;
+          height: 100%;
+        `}
+      >
+        <div
+          css={css`
+            width: 100%;
+            height: 100%;
+          `}
+        >
+          <h1>Modal</h1>
+          <button type="button" onClick={closeModal}>
+            Close
+          </button>
+        </div>
+      </Modal>
     </main>
   );
 }
