@@ -1,5 +1,7 @@
+import { css } from "@emotion/react";
 import React from "react";
 
+import { Spinner } from "./components";
 import { CommunicationPlatform, Main } from "./containers";
 import { usePathContext, MessageStatesContextProvider } from "./contexts";
 
@@ -18,5 +20,17 @@ export function Router() {
     return <Main />;
   }
 
-  return <div>scratch loading...</div>;
+  return (
+    <div
+      css={css`
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      `}
+    >
+      <Spinner />
+    </div>
+  );
 }
