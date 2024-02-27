@@ -1,6 +1,6 @@
 import React from "react";
 
-import { CommunicationPlatform } from "./containers";
+import { CommunicationPlatform, Main } from "./containers";
 import { usePathContext, MessageStatesContextProvider } from "./contexts";
 
 export function Router() {
@@ -14,5 +14,9 @@ export function Router() {
     );
   }
 
-  return <div>main</div>;
+  if (path === "main") {
+    return <Main />;
+  }
+
+  return <div>scratch loading...</div>;
 }

@@ -9,9 +9,9 @@ import {
 
 import { useAppGlobal } from ".";
 
-type Path = "main" | "chat";
+type Path = "main" | "chat" | null;
 
-const PathContext = createContext<Path>("main");
+const PathContext = createContext<Path>(null);
 
 const SetPathContext = createContext<Dispatch<SetStateAction<Path>> | null>(
   null,
