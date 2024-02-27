@@ -14,10 +14,12 @@ export function useModal() {
 
   const Modal = useCallback(
     ({
+      keepOpen,
       modalCss,
       children,
       onBackgroundClick,
     }: {
+      keepOpen?: boolean;
       modalCss?: Interpolation<Theme>;
       children?: ReactElement;
       onBackgroundClick?: () => void;
@@ -34,7 +36,7 @@ export function useModal() {
             modalCss,
           ]}
           onClick={() => {
-            closeModal();
+            if (!keepOpen) closeModal();
             onBackgroundClick?.();
           }}
         >

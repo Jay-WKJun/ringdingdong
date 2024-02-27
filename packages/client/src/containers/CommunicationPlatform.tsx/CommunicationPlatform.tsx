@@ -30,7 +30,7 @@ const chatContainerStyle = css`
 
 export function CommunicationPlatform() {
   const setMessageState = useSetMessageStates();
-  const { apis } = useAppGlobal();
+  const { apis, localStorageService } = useAppGlobal();
 
   const handleInputTextSubmit = useCallback(
     (text: string) => {
@@ -57,7 +57,7 @@ export function CommunicationPlatform() {
         ];
       });
 
-      const token = localStorage.getItem("token");
+      const token = localStorageService?.getLocalStorage();
       if (!token) return;
 
       apis

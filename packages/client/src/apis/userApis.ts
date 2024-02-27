@@ -46,7 +46,7 @@ export async function postUser(
   { id, password, description }: PostUserProps,
 ) {
   try {
-    return fetch(`${this.serverUrl}/new`, {
+    return fetch(`${this.serverUrl}/user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -15,12 +15,12 @@ import { Chat } from "./Chat";
 export function ChatHistory() {
   const messageStates = useMessageStates();
   const setMessageStates = useSetMessageStates();
-  const { apis, serverUrl } = useAppGlobal();
+  const { apis, serverUrl, localStorageService } = useAppGlobal();
 
   const { targetRef, setScrollToBottom } = useScrollSet<HTMLDivElement>();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorageService?.getLocalStorage();
     if (!token) return;
 
     apis.getMessages(token).then((res) => {
