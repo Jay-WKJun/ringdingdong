@@ -92,7 +92,7 @@ export function CommunicationPlatform() {
           );
         });
     },
-    [setMessageState, apis],
+    [setMessageState, localStorageService, apis],
   );
 
   return (

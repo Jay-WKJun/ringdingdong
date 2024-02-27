@@ -7,7 +7,7 @@ import {
 } from "./contexts";
 import { Router } from "./Router";
 
-interface AppProps extends AppGlobalContextProviderProps {}
+interface AppProps extends Omit<AppGlobalContextProviderProps, "children"> {}
 
 function App(props: AppProps) {
   return (

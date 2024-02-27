@@ -40,7 +40,13 @@ export function ChatHistory() {
         }
       });
     });
-  }, [apis, serverUrl, setMessageStates, setScrollToBottom]);
+  }, [
+    apis,
+    localStorageService,
+    serverUrl,
+    setMessageStates,
+    setScrollToBottom,
+  ]);
 
   useEffect(() => {
     if (messageStates) {
