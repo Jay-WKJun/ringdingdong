@@ -13,8 +13,8 @@ import {
   postUser,
   getHealthCheck,
   getSubscribe,
+  getMessages,
 } from "./views";
-import { getMessages } from "./views/getMessages";
 
 const app = express();
 const port = 3000;
