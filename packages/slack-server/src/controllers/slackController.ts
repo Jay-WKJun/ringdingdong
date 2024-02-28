@@ -8,7 +8,7 @@ import {
 
 import { createToken, verifyToken } from "./tokenController";
 
-export async function initSlackController() {
+export async function initSlackSubscribeController() {
   const botId = await getBotId();
   if (botId) return;
 

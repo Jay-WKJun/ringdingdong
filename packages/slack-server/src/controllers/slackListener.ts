@@ -40,8 +40,6 @@ const messageListener: { [threadId: string]: MessageListener } = {};
     // 메세지가 아니면 무시하기, TODO: 다른 type 메세지도 받을 수 있도록 하기
     if (type !== "message") return;
 
-    console.log("message : ", message);
-
     const htmlText = slackMarkdown.toHTML(message.text as string);
     const callback = messageListener[threadId];
     callback?.({

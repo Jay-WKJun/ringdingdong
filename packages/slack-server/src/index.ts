@@ -1,12 +1,13 @@
 import "dotenv/config";
+import cors from "cors";
 import express from "express";
 import fs from "fs";
 import spdy from "spdy";
 
-import { initSlackController } from "./controllers/slackController";
+import { initSlackSubscribeController } from "./controllers/slackController";
 import { ROOT_PATH, CLIENT_URL, KEY_NAME, CERT_NAME, HTTP } from "./utils/env";
 import {
-  postAuthToken,
+  getAuthToken,
   postMessage,
   postRefreshToken,
   postUser,
@@ -19,69 +20,90 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors({ origin: CLIENT_URL }));
 
-initSlackController();
+initSlackSubscribeController();
 
-app.get("/", (req, res) => {
-  res.send("Success");
-});
+app.get(
+  "/",
+  cors({
+    origin: CLIENT_URL,
+    methods: "GET, OPTIONS",
+  }),
+  (req, res) => {
+    res.send("Success");
+  },
+);
 
-app.get("/health_check", getHealthCheck);
+app.get(
+  "/health",
+  cors({
+    origin: CLIENT_URL,
+    methods: "GET, OPTIONS",
+  }),
+  getHealthCheck,
+);
 
-app.options("/subscribe", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Headers", "Authorization");
-  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-  res.status(204).send();
-});
+app.get(
+  "/subscribe",
+  cors({
+    origin: CLIENT_URL,
+    credentials: true,
+    allowedHeaders: "Authorization",
+    methods: "GET, OPTIONS",
+  }),
+  getSubscribe,
+);
 
-app.get("/subscribe", getSubscribe);
+app.get(
+  "/messages",
+  cors({
+    origin: CLIENT_URL,
+    methods: "GET, OPTIONS",
+    allowedHeaders: "Content-Type, Authorization",
+  }),
+  getMessages,
+);
 
-app.options("/messages", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
-  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.send();
-});
+app.get(
+  "/token/auth",
+  cors({
+    origin: CLIENT_URL,
+    methods: "GET, OPTIONS",
+    allowedHeaders: "Content-Type, Authorization",
+  }),
+  getAuthToken,
+);
 
-app.get("/messages", getMessages);
+app.post(
+  "/token/refresh",
+  cors({
+    origin: CLIENT_URL,
+    methods: "POST, OPTIONS",
+    allowedHeaders: "Content-Type, Authorization",
+  }),
+  postRefreshToken,
+);
 
-app.options("/auth_token", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.send();
-});
+app.post(
+  "/user",
+  cors({
+    origin: CLIENT_URL,
+    methods: "POST, OPTIONS",
+    allowedHeaders: "Content-Type, Authorization",
+  }),
+  postUser,
+);
 
-app.post("/auth_token", postAuthToken);
-
-app.options("/refresh_token", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.send();
-});
-
-app.post("/refresh_token", postRefreshToken);
-
-app.options("/user", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.send();
-});
-
-app.post("/user", postUser);
-
-app.options("/message", (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", CLIENT_URL);
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.send();
-});
-
-app.post("/message", postMessage);
+app.post(
+  "/message",
+  cors({
+    origin: CLIENT_URL,
+    methods: "POST, OPTIONS",
+    allowedHeaders: "Content-Type, Authorization",
+  }),
+  postMessage,
+);
 
 const isHTTP1 = HTTP === "1";
 

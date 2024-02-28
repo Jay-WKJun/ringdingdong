@@ -1,11 +1,11 @@
 export async function getAuthToken(this: { serverUrl: string }, token: string) {
   try {
-    return fetch(`${this.serverUrl}/auth_token`, {
+    return fetch(`${this.serverUrl}/token/auth`, {
       method: "GET",
       headers: {
         Authorization: token,
       },
-    }).then((res) => res.json());
+    });
   } catch (e) {
     // @ts-expect-error: api error
     throw new Error(e);
@@ -22,7 +22,7 @@ export async function getRefreshToken(
   { id, password }: PostRefreshTokenProps,
 ) {
   try {
-    return fetch(`${this.serverUrl}/refresh_token`, {
+    return fetch(`${this.serverUrl}/token/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

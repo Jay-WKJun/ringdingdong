@@ -5,7 +5,7 @@ import {
   isUserExist,
 } from "@/controllers/slackController";
 
-export const postAuthToken: RequestHandler = async (req, res) => {
+export const getAuthToken: RequestHandler = async (req, res) => {
   const jwtToken = req.header("Authorization");
   if (!jwtToken) {
     res.status(400).send("Bad request");
@@ -22,7 +22,8 @@ export const postAuthToken: RequestHandler = async (req, res) => {
 
   if (!(await isUserExist(decodedToken))) {
     res.status(401).send("Unauthorized");
+    return;
   }
 
-  res.status(204);
+  res.status(204).send();
 };

@@ -34,9 +34,11 @@ export function PathContextProvider({ children }: PathContextProviderProps) {
       apis
         .getAuthToken(token)
         .then(() => {
+          console.log("token auth done");
           setPath("chat");
         })
         .catch(() => {
+          console.log("token auth failed");
           setPath("main");
         });
     }
