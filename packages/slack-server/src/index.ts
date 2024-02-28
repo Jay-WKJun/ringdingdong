@@ -20,90 +20,71 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
-app.use(cors({ origin: CLIENT_URL }));
 
 initSlackSubscribeController();
 
-app.get(
-  "/",
-  cors({
-    origin: CLIENT_URL,
-    methods: "GET, OPTIONS",
-  }),
-  (req, res) => {
-    res.send("Success");
-  },
-);
+const HOME_PATH = "/";
+const homeCorsOptions = {
+  origin: CLIENT_URL,
+  methods: "GET, OPTIONS",
+};
+app.options(HOME_PATH, cors(homeCorsOptions));
+app.get(HOME_PATH, cors(homeCorsOptions), getHealthCheck);
 
-app.get(
-  "/health",
-  cors({
-    origin: CLIENT_URL,
-    methods: "GET, OPTIONS",
-  }),
-  getHealthCheck,
-);
+const SUBSCRIBE_PATH = "/subscribe";
+const subscribeCorsOptions = {
+  origin: CLIENT_URL,
+  credentials: true,
+  allowedHeaders: "Authorization",
+  methods: "GET, OPTIONS",
+};
+app.options(SUBSCRIBE_PATH, cors(subscribeCorsOptions));
+app.get(SUBSCRIBE_PATH, cors(subscribeCorsOptions), getSubscribe);
 
-app.get(
-  "/subscribe",
-  cors({
-    origin: CLIENT_URL,
-    credentials: true,
-    allowedHeaders: "Authorization",
-    methods: "GET, OPTIONS",
-  }),
-  getSubscribe,
-);
+const MESSAGES_PATH = "/messages";
+const messagesCorsOptions = {
+  origin: CLIENT_URL,
+  methods: "GET, OPTIONS",
+  allowedHeaders: "Content-Type, Authorization",
+};
+app.options(MESSAGES_PATH, cors(messagesCorsOptions));
+app.get(MESSAGES_PATH, cors(messagesCorsOptions), getMessages);
 
-app.get(
-  "/messages",
-  cors({
-    origin: CLIENT_URL,
-    methods: "GET, OPTIONS",
-    allowedHeaders: "Content-Type, Authorization",
-  }),
-  getMessages,
-);
+const AUTH_PATH = "/token/auth";
+const authCorsOptions = {
+  origin: CLIENT_URL,
+  methods: "GET, OPTIONS",
+  allowedHeaders: "Content-Type, Authorization",
+};
+app.options(AUTH_PATH, cors(authCorsOptions));
+app.get(AUTH_PATH, cors(authCorsOptions), getAuthToken);
 
-app.get(
-  "/token/auth",
-  cors({
-    origin: CLIENT_URL,
-    methods: "GET, OPTIONS",
-    allowedHeaders: "Content-Type, Authorization",
-  }),
-  getAuthToken,
-);
+const REFRESH_PATH = "/token/refresh";
+const refreshCorsOptions = {
+  origin: CLIENT_URL,
+  methods: "POST, OPTIONS",
+  allowedHeaders: "Content-Type, Authorization",
+};
+app.options(REFRESH_PATH, cors(refreshCorsOptions));
+app.post(REFRESH_PATH, cors(refreshCorsOptions), postRefreshToken);
 
-app.post(
-  "/token/refresh",
-  cors({
-    origin: CLIENT_URL,
-    methods: "POST, OPTIONS",
-    allowedHeaders: "Content-Type, Authorization",
-  }),
-  postRefreshToken,
-);
+const USER_PATH = "/user";
+const userCorsOptions = {
+  origin: CLIENT_URL,
+  methods: "POST, OPTIONS",
+  allowedHeaders: "Content-Type, Authorization",
+};
+app.options(USER_PATH, cors(userCorsOptions));
+app.post(USER_PATH, cors(userCorsOptions), postUser);
 
-app.post(
-  "/user",
-  cors({
-    origin: CLIENT_URL,
-    methods: "POST, OPTIONS",
-    allowedHeaders: "Content-Type, Authorization",
-  }),
-  postUser,
-);
-
-app.post(
-  "/message",
-  cors({
-    origin: CLIENT_URL,
-    methods: "POST, OPTIONS",
-    allowedHeaders: "Content-Type, Authorization",
-  }),
-  postMessage,
-);
+const MESSAGE_PATH = "/message";
+const messageCorsOptions = {
+  origin: CLIENT_URL,
+  methods: "POST, OPTIONS",
+  allowedHeaders: "Content-Type, Authorization",
+};
+app.options(MESSAGE_PATH, cors(messageCorsOptions));
+app.post(MESSAGE_PATH, cors(messageCorsOptions), postMessage);
 
 const isHTTP1 = HTTP === "1";
 
