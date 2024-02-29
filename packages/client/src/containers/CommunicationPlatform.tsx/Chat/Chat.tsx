@@ -1,7 +1,12 @@
-import { css } from "@emotion/react";
+import { css, useTheme } from "@emotion/react";
 import React, { useCallback, useState } from "react";
 
-import { useAppGlobal, useSetMessageStates } from "@/contexts";
+import {
+  useAppGlobal,
+  useSetPathContext,
+  useSetMessageStates,
+} from "@/contexts";
+import type { TalkToMeTheme } from "@/styles";
 import type { Message, MessageSendState } from "@/types";
 
 import { Avatar } from "./Avatar";
@@ -20,7 +25,10 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
   const [isHover, setIsHover] = useState(false);
 
   const setMessageStates = useSetMessageStates();
-  const { apis } = useAppGlobal();
+  const { apis, localStorageService } = useAppGlobal();
+  const setPath = useSetPathContext();
+
+  const theme = useTheme() as TalkToMeTheme;
 
   const handleResendButtonClick = useCallback(async () => {
     if (!tempId || sendState !== "failed") return;
@@ -36,9 +44,17 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
     });
 
     try {
+      const token = localStorageService?.getLocalStorage();
+      if (!token) {
+        alert("token is not found");
+        setPath?.("main");
+        return;
+      }
+
       const res = await apis.postMessage({
         tempId,
         message: message.message,
+        token,
       });
 
       setMessageStates((prev) => {
@@ -61,7 +77,15 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
         });
       });
     }
-  }, [apis, message, sendState, setMessageStates, tempId]);
+  }, [
+    apis,
+    localStorageService,
+    message,
+    sendState,
+    setMessageStates,
+    setPath,
+    tempId,
+  ]);
 
   const handleDeleteButtonClick = useCallback(() => {
     setMessageStates((prev) => {
@@ -98,7 +122,7 @@ export function Chat({ tempId, sendState, message }: ChatProps) {
           height: 40px;
           border-radius: 100%;
           overflow: hidden;
-          background-color: red;
+          background-color: ${theme.avatarBackgroundColor};
         `}
       >
         <Avatar message={message} />

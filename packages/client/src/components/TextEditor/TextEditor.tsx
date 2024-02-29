@@ -125,7 +125,8 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
       css={css`
         position: relative;
         width: 100%;
-        border: ${bottomMode ? "none" : "1px solid #ccc"};
+        border: ${bottomMode ? "none" : "1px solid"};
+        border-color: inherit;
         border-radius: 5px;
         box-sizing: border-box;
       `}

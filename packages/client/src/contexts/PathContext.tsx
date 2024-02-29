@@ -33,9 +33,14 @@ export function PathContextProvider({ children }: PathContextProviderProps) {
     if (token) {
       apis
         .getAuthToken(token)
-        .then(() => {
-          console.log("token auth done");
-          setPath("chat");
+        .then((e) => {
+          if (e.status < 400) {
+            console.log("token auth done");
+            setPath("chat");
+          } else {
+            console.log("token auth failed");
+            setPath("main");
+          }
         })
         .catch(() => {
           console.log("token auth failed");

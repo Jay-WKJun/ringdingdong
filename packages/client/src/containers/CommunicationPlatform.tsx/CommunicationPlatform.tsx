@@ -1,28 +1,17 @@
-import { css } from "@emotion/react";
+import { css, useTheme } from "@emotion/react";
 import React, { useCallback } from "react";
 
 import { TextEditor, Header } from "@/components";
 import { useAppGlobal, useSetMessageStates } from "@/contexts";
+import type { TalkToMeTheme } from "@/styles";
 
 import { ChatHistory } from "./ChatHistory";
-
-const chatContainerStyle = css`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  height: 100%;
-  min-width: 280px;
-  min-height: 200px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #fff;
-  box-sizing: border-box;
-`;
 
 export function CommunicationPlatform() {
   const setMessageState = useSetMessageStates();
   const { apis, localStorageService } = useAppGlobal();
+
+  const theme = useTheme() as TalkToMeTheme;
 
   const handleInputTextSubmit = useCallback(
     (text: string) => {
@@ -88,7 +77,21 @@ export function CommunicationPlatform() {
   );
 
   return (
-    <div css={chatContainerStyle}>
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        height: 100%;
+        min-width: 280px;
+        min-height: 200px;
+        border: 1px solid ${theme.borderColor};
+        border-radius: 10px;
+        background-color: ${theme.backgroundColor};
+        box-sizing: border-box;
+      `}
+    >
       <Header />
       <ChatHistory />
       <TextEditor bottomMode onSubmit={handleInputTextSubmit} />

@@ -1,48 +1,43 @@
-import { css } from "@emotion/react";
-import React from "react";
+import { ThemeProvider } from "@emotion/react";
+import React, { useMemo, memo } from "react";
 
 import {
   AppGlobalContextProvider,
   AppGlobalContextProviderProps,
   PathContextProvider,
 } from "./contexts";
-import { Router } from "./Router";
+import { Global } from "./Global";
+import { TalkToMeTheme, themes } from "./styles";
 
-const globalStyle = css`
-  width: 100%;
-  height: 100%;
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  a {
-    position: relative;
-  }
-
-  input {
-    border: none;
-    outline: none;
-  }
-
-  button {
-    border: none;
-    cursor: pointer;
-    background-color: #f9f9f9;
-  }
-`;
-
-interface AppProps extends Omit<AppGlobalContextProviderProps, "children"> {}
+interface AppProps extends Omit<AppGlobalContextProviderProps, "children"> {
+  themeMode?: string;
+}
 
 function App(props: AppProps) {
+  const { themeMode } = props;
+
+  const theme = useMemo(() => {
+    const themeRes = themeMode && themes[themeMode];
+    if (themeRes) return themeRes;
+
+    const isDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const systemMode = isDark ? "dark" : "light";
+
+    return themes[systemMode] as TalkToMeTheme;
+  }, [themeMode]);
+
   return (
-    <AppGlobalContextProvider {...props}>
-      <PathContextProvider>
-        <div css={globalStyle}>
-          <Router />
-        </div>
-      </PathContextProvider>
-    </AppGlobalContextProvider>
+    <ThemeProvider theme={theme}>
+      <AppGlobalContextProvider {...props}>
+        <PathContextProvider>
+          <Global />
+        </PathContextProvider>
+      </AppGlobalContextProvider>
+    </ThemeProvider>
   );
 }
 
-export default App;
+const TalkToMe = memo(App);
+export default TalkToMe;

@@ -1,9 +1,10 @@
-import { css } from "@emotion/react";
+import { css, useTheme } from "@emotion/react";
 import React, { useCallback, useRef } from "react";
 
 import { TextEditor } from "@/components";
 import { useAppGlobal, useSetPathContext } from "@/contexts";
 import { useModal } from "@/hooks";
+import type { TalkToMeTheme } from "@/styles";
 
 export function Main() {
   const idRef = useRef<HTMLInputElement>(null);
@@ -18,6 +19,8 @@ export function Main() {
 
   const { apis, localStorageService } = useAppGlobal();
   const setPath = useSetPathContext();
+
+  const theme = useTheme() as TalkToMeTheme;
 
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -60,6 +63,7 @@ export function Main() {
         align-items: center;
         border-radius: 10px;
         overflow: hidden;
+        background-color: ${theme.backgroundColor};
       `}
     >
       <form
@@ -73,7 +77,8 @@ export function Main() {
           margin: auto;
           padding: 10px 20px;
           border-radius: 10px;
-          box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.3);
+          background-color: ${theme.backgroundColor};
+          box-shadow: 0 0 20px 0 ${theme.boxShadowColor};
         `}
         onSubmit={handleSubmit}
       >
@@ -104,7 +109,7 @@ export function Main() {
               css={css`
                 padding: 10px 20px;
                 border-radius: 30px;
-                box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+                box-shadow: 0 0 10px 0 ${theme.boxShadowColor};
               `}
               ref={idRef}
             />
@@ -114,7 +119,7 @@ export function Main() {
               css={css`
                 padding: 10px 20px;
                 border-radius: 30px;
-                box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+                box-shadow: 0 0 10px 0 ${theme.boxShadowColor};
               `}
               ref={passwordRef}
             />
@@ -127,7 +132,7 @@ export function Main() {
               height: 50px;
               padding: 10px 20px;
               border-radius: 30px;
-              box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+              box-shadow: 0 0 10px 0 ${theme.boxShadowColor};
             `}
           >
             {`Let's Go 😎`}
@@ -154,7 +159,7 @@ export function Main() {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: white;
+            background-color: ${theme.backgroundColor};
             border-radius: 30px;
           `}
         >
@@ -168,6 +173,7 @@ export function Main() {
               font-weight: bold;
               font-size: 16px;
               margin-bottom: 20px;
+              box-shadow: 0 0 7px 0 ${theme.boxShadowColor};
             `}
             onClick={() => {
               closeModal();
@@ -183,6 +189,7 @@ export function Main() {
               border-radius: 30px;
               font-weight: bold;
               font-size: 16px;
+              box-shadow: 0 0 7px 0 ${theme.boxShadowColor};
             `}
             onClick={closeModal}
           >
@@ -213,7 +220,7 @@ export function Main() {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: white;
+            background-color: ${theme.backgroundColor};
             border-radius: 30px;
           `}
         >
@@ -258,6 +265,7 @@ export function Main() {
                 margin-top: 30px;
                 font-weight: bold;
                 font-size: 16px;
+                box-shadow: 0 0 7px 0 ${theme.boxShadowColor};
               `}
               onClick={closeNewThreadModal}
             >
