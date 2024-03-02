@@ -1,4 +1,4 @@
-import { css } from "@emotion/react";
+import { css, useTheme } from "@emotion/react";
 import React, { KeyboardEvent, useCallback, useRef, useState } from "react";
 
 import { Button } from "@/components/Button";
@@ -9,13 +9,14 @@ import {
   appendAnchorController,
 } from "./AnchorController";
 import { TEXT_STATES, TEXT_INDENTS, ANCHOR } from "./constants";
+import type { TextControllerTheme } from "./styles";
 import { TextController } from "./TextController";
 import { TextInput, SelectEventParameters } from "./TextInput";
 
 const textStatesSet = new Set(TEXT_STATES);
 const textIndentsSet = new Set(TEXT_INDENTS);
 
-interface TextEditorProps {
+export interface TextEditorProps {
   bottomMode?: boolean;
   onSubmit?: (message: string) => void;
 }
@@ -32,6 +33,8 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
   const [textStates, setTextStates] = useState<typeof TEXT_STATES>([]);
   const [indentState, setIndentState] =
     useState<(typeof TEXT_INDENTS)[number]>("");
+
+  const theme = useTheme() as TextControllerTheme;
 
   const sendMessage = useCallback(() => {
     if (!textInputRef.current) return;
@@ -146,7 +149,10 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
           display: flex;
           min-height: calc(1em + 20px);
           max-height: calc(5em + 20px);
+          padding-top: 10px;
           overflow-y: auto;
+          background-color: ${theme.backgroundColor};
+          color: ${theme.textColor};
         `}
       >
         <TextInput
@@ -171,6 +177,11 @@ export function TextEditor({ bottomMode, onSubmit }: TextEditorProps) {
             type="button"
             css={css`
               height: 3em;
+              background-color: ${theme.backgroundColor2} !important;
+
+              &:hover {
+                background-color: ${theme.hoverColor} !important;
+              }
             `}
             onClick={useCallback(() => {
               sendMessage();

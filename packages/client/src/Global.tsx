@@ -26,12 +26,6 @@ export function Global() {
           border: none;
           outline: none;
         }
-
-        button {
-          border: none;
-          cursor: pointer;
-          background-color: ${theme.backgroundColor2};
-        }
       `}
     >
       <Router />

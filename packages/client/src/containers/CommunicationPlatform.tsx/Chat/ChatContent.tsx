@@ -1,6 +1,7 @@
-import { css } from "@emotion/react";
+import { css, useTheme } from "@emotion/react";
 import React from "react";
 
+import type { TalkToMeTheme } from "@/styles";
 import { Parser } from "@/utils/parser";
 
 interface ChatContentProps {
@@ -8,11 +9,13 @@ interface ChatContentProps {
 }
 
 export function ChatContent({ message }: ChatContentProps) {
+  const theme = useTheme() as TalkToMeTheme;
+
   return (
     <div
       contentEditable={false}
       css={css`
-        background-color: #c9c5c5;
+        background-color: ${theme.chatBackgroundColor};
         padding: 1em;
         border-radius: 20px;
         max-width: 65%;

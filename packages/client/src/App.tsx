@@ -1,5 +1,5 @@
 import { ThemeProvider } from "@emotion/react";
-import React, { useMemo, memo } from "react";
+import React, { memo } from "react";
 
 import {
   AppGlobalContextProvider,
@@ -7,7 +7,8 @@ import {
   PathContextProvider,
 } from "./contexts";
 import { Global } from "./Global";
-import { TalkToMeTheme, themes } from "./styles";
+import { useThemeSetter } from "./hooks";
+import { themes } from "./styles";
 
 interface AppProps extends Omit<AppGlobalContextProviderProps, "children"> {
   themeMode?: string;
@@ -16,17 +17,7 @@ interface AppProps extends Omit<AppGlobalContextProviderProps, "children"> {
 function App(props: AppProps) {
   const { themeMode } = props;
 
-  const theme = useMemo(() => {
-    const themeRes = themeMode && themes[themeMode];
-    if (themeRes) return themeRes;
-
-    const isDark =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const systemMode = isDark ? "dark" : "light";
-
-    return themes[systemMode] as TalkToMeTheme;
-  }, [themeMode]);
+  const theme = useThemeSetter(themes, "dark");
 
   return (
     <ThemeProvider theme={theme}>

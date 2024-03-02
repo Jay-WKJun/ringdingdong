@@ -1,7 +1,7 @@
 import { css, useTheme } from "@emotion/react";
 import React, { useCallback, useRef } from "react";
 
-import { TextEditor } from "@/components";
+import { Button, TextEditor } from "@/components";
 import { useAppGlobal, useSetPathContext } from "@/contexts";
 import { useModal } from "@/hooks";
 import type { TalkToMeTheme } from "@/styles";
@@ -124,7 +124,7 @@ export function Main() {
               ref={passwordRef}
             />
           </div>
-          <button
+          <Button
             type="submit"
             css={css`
               width: 100%;
@@ -136,7 +136,7 @@ export function Main() {
             `}
           >
             {`Let's Go 😎`}
-          </button>
+          </Button>
         </div>
       </form>
 
@@ -165,7 +165,7 @@ export function Main() {
         >
           <h1>User not exist</h1>
 
-          <button
+          <Button
             type="button"
             css={css`
               padding: 10px 20px;
@@ -181,8 +181,8 @@ export function Main() {
             }}
           >
             Create New one! 🎉
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
             css={css`
               padding: 10px 20px;
@@ -194,7 +194,7 @@ export function Main() {
             onClick={closeModal}
           >
             close
-          </button>
+          </Button>
         </div>
       </Modal>
 
@@ -256,7 +256,7 @@ export function Main() {
                   });
               }}
             />
-            <button
+            <Button
               type="button"
               css={css`
                 padding: 20px;
@@ -270,7 +270,7 @@ export function Main() {
               onClick={closeNewThreadModal}
             >
               cancel
-            </button>
+            </Button>
           </div>
         </div>
       </NewThreadModal>

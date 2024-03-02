@@ -1,4 +1,4 @@
-import { css } from "@emotion/react";
+import { css, useTheme } from "@emotion/react";
 import React from "react";
 
 import { Button } from "@/components/Button";
@@ -11,6 +11,7 @@ import {
   STRIKE,
   UNORDERED_LIST,
 } from "./constants";
+import { TextControllerTheme } from "./styles";
 
 interface TextControllerProps {
   textStates: string[];
@@ -21,37 +22,31 @@ export function TextController({
   textStates,
   indentState,
 }: TextControllerProps) {
+  const theme = useTheme() as TextControllerTheme;
+
   return (
     <div
       css={css`
         display: flex;
         gap: 5px;
         border: none;
-        background-color: #f9f9f9;
+        background-color: ${theme.backgroundColor2};
         padding: 5px 3px;
         border-radius: 5px;
         overflow: hidden;
         box-sizing: border-box;
-        margin-bottom: 5px;
 
         button {
           flex: 1;
           padding: 0.3em;
-          border: none;
-          cursor: pointer;
-
-          &:hover {
-            background-color: #e0e0e0;
-          }
         }
       `}
     >
       <Button
         type="button"
         css={css`
-          background-color: ${textStates.includes(BOLD)
-            ? "lightgray"
-            : "#f9f9f9"};
+          ${textStates.includes(BOLD) &&
+          `background-color: ${theme.backgroundColor} !important;`}
         `}
         onClick={() => {
           document.execCommand("bold");
@@ -62,9 +57,8 @@ export function TextController({
       <Button
         type="button"
         css={css`
-          background-color: ${textStates.includes(ITALIC)
-            ? "lightgray"
-            : "#f9f9f9"};
+          ${textStates.includes(ITALIC) &&
+          `background-color: ${theme.backgroundColor} !important;`}
         `}
         onClick={() => {
           document.execCommand("italic");
@@ -75,9 +69,8 @@ export function TextController({
       <Button
         type="button"
         css={css`
-          background-color: ${textStates.includes(STRIKE)
-            ? "lightgray"
-            : "#f9f9f9"};
+          ${textStates.includes(STRIKE) &&
+          `background-color: ${theme.backgroundColor} !important;`};
         `}
         onClick={() => {
           document.execCommand("strikethrough");
@@ -88,9 +81,8 @@ export function TextController({
       <Button
         type="button"
         css={css`
-          background-color: ${textStates.includes(ANCHOR)
-            ? "lightgray"
-            : "#f9f9f9"};
+          ${textStates.includes(ANCHOR) &&
+          `background-color: ${theme.backgroundColor} !important;`};
         `}
         onClick={() => {
           const isLinked = textStates.includes(ANCHOR);
@@ -112,9 +104,8 @@ export function TextController({
       <Button
         type="button"
         css={css`
-          background-color: ${indentState === UNORDERED_LIST
-            ? "lightgray"
-            : "#f9f9f9"};
+          ${indentState === UNORDERED_LIST &&
+          `background-color: ${theme.backgroundColor} !important;`}
         `}
         onClick={() => {
           document.execCommand("insertUnorderedList");
@@ -125,9 +116,8 @@ export function TextController({
       <Button
         type="button"
         css={css`
-          background-color: ${indentState === ORDERED_LIST
-            ? "lightgray"
-            : "#f9f9f9"};
+          ${indentState === ORDERED_LIST &&
+          `background-color: ${theme.backgroundColor} !important;`}
         `}
         onClick={() => {
           document.execCommand("insertOrderedList");
