@@ -17,7 +17,7 @@ interface AppProps extends Omit<AppGlobalContextProviderProps, "children"> {
 function App(props: AppProps) {
   const { themeMode } = props;
 
-  const theme = useThemeSetter(themes, "dark");
+  const theme = useThemeSetter(themes, themeMode);
 
   return (
     <ThemeProvider theme={theme}>

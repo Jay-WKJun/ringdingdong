@@ -16,7 +16,7 @@ interface TextEditorProps extends OriginalProps {
 function TextEditorStyle(props: TextEditorProps) {
   const { themeMode, ...rest } = props;
 
-  const theme = useThemeSetter(textControllerThemes, "dark");
+  const theme = useThemeSetter(textControllerThemes, themeMode);
 
   return (
     <ThemeProvider theme={theme}>
